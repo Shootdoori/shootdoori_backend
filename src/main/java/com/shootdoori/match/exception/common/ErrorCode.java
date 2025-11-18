@@ -23,6 +23,8 @@ public enum ErrorCode {
     DIFFERENT_UNIVERSITY("팀 소속 대학과 동일한 대학의 사용자만 가입할 수 있습니다.", HttpStatus.FORBIDDEN),
     TEAM_REVIEW_NOT_FOUND("해당 팀 리뷰를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     TEAM_HAS_REMAINING_MEMBERS("아직 팀에 소속된 멤버가 있습니다.", HttpStatus.BAD_REQUEST),
+    INVALID_TEAM_NAME("팀 이름은 필수입니다.", HttpStatus.BAD_REQUEST),
+    TEAM_NAME_TOO_LONG("팀 이름은 최대 100자입니다.", HttpStatus.BAD_REQUEST),
 
     // Team Member
     ALREADY_TEAM_MEMBER("이미 해당 팀의 멤버입니다.", HttpStatus.CONFLICT),
