@@ -5,7 +5,7 @@ public record TeamDetailResponseDto(
     String name,
     String description,
     String university,
-    Integer memberCount,
+    String teamType,
     String createdAt
 ) {
 
