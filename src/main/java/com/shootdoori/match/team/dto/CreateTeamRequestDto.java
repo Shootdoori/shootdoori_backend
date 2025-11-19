@@ -1,10 +1,9 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.team.dto;
 
-public record TeamRequestDto(
+public record CreateTeamRequestDto(
     String name,
     String description,
     String university,
-    String skillLevel,
     String teamType
 ) {
 

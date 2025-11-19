@@ -1,6 +1,9 @@
-package com.shootdoori.match.entity.team;
+package com.shootdoori.match.team.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
+import com.shootdoori.match.team.domain.value.Description;
+import com.shootdoori.match.team.domain.value.TeamName;
+import com.shootdoori.match.team.domain.value.UniversityName;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NoPermissionException;
 import jakarta.persistence.Column;

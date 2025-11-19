@@ -1,4 +1,4 @@
-package com.shootdoori.match.entity.team;
+package com.shootdoori.match.team.domain.value;
 
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.domain.team.TeamNameException;

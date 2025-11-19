@@ -1,11 +1,10 @@
-package com.shootdoori.match.controller;
+package com.shootdoori.match.team.controller;
 
-import com.shootdoori.match.dto.CreateTeamResponseDto;
-import com.shootdoori.match.dto.TeamDetailResponseDto;
-import com.shootdoori.match.dto.TeamRequestDto;
+import com.shootdoori.match.team.dto.CreateTeamResponseDto;
+import com.shootdoori.match.team.dto.TeamDetailResponseDto;
+import com.shootdoori.match.team.dto.TeamRequestDto;
 import com.shootdoori.match.resolver.LoginUser;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

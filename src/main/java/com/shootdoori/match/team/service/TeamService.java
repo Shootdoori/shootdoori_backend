@@ -1,14 +1,14 @@
-package com.shootdoori.match.service;
+package com.shootdoori.match.team.service;
 
-import com.shootdoori.match.dto.CreateTeamResponseDto;
-import com.shootdoori.match.dto.TeamDetailResponseDto;
-import com.shootdoori.match.dto.TeamMapper;
-import com.shootdoori.match.dto.TeamRequestDto;
-import com.shootdoori.match.entity.team.Team;
-import com.shootdoori.match.entity.team.UniversityName;
+import com.shootdoori.match.team.dto.CreateTeamResponseDto;
+import com.shootdoori.match.team.dto.TeamDetailResponseDto;
+import com.shootdoori.match.team.mapper.TeamMapper;
+import com.shootdoori.match.team.dto.TeamRequestDto;
+import com.shootdoori.match.team.domain.Team;
+import com.shootdoori.match.team.domain.value.UniversityName;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NotFoundException;
-import com.shootdoori.match.repository.TeamRepository;
+import com.shootdoori.match.team.repository.TeamRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
