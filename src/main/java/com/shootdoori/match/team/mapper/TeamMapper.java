@@ -13,7 +13,6 @@ public class TeamMapper {
 
     public Team toEntity(TeamRequestDto requestDto, Long captainId) {
         return Team.of(
-            captainId,
             requestDto.name(),
             requestDto.university(),
             parseToTeamType(requestDto.teamType()),

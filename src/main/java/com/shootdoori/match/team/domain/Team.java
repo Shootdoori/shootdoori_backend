@@ -23,11 +23,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "team")
 @EntityListeners(AuditingEntityListener.class)
 public class Team {
-    private Long id;
-
     @Id
     @GeneratedValue
-    private Long captainId;
+    private Long id;
 
     @Embedded
     private TeamName teamName;
@@ -47,24 +45,19 @@ public class Team {
 
     protected Team() { }
 
-    protected Team(Long captainId, String teamName, String university, TeamType teamType, String description) {
-        this.captainId = captainId;
+    protected Team(String teamName, String university, TeamType teamType, String description) {
         this.teamName = TeamName.of(teamName);
         this.universityName = UniversityName.of(university);
         this.teamType = teamType;
         this.description = Description.of(description);
     }
 
-    public static Team of(Long captainId, String teamName, String university, TeamType teamType, String description) {
-        return new Team(captainId, teamName, university, teamType, description);
+    public static Team of(String teamName, String university, TeamType teamType, String description) {
+        return new Team(teamName, university, teamType, description);
     }
 
     public Long getId() {
         return id;
-    }
-
-    public Long getCaptainId() {
-        return captainId;
     }
 
     public TeamName getTeamName() {
@@ -88,16 +81,8 @@ public class Team {
     }
 
     public void changeTeamInfo(String name, String university, String description, Long userId) {
-        ensureCaptain(userId);
-
         this.teamName = TeamName.of(name);
         this.universityName = UniversityName.of(university);
         this.description = Description.of(description);
-    }
-
-    private void ensureCaptain(Long userId) {
-        if (!Objects.equals(captainId, userId)) {
-            throw new NoPermissionException(ErrorCode.CAPTAIN_ONLY_OPERATION);
-        }
     }
 }
