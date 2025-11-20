@@ -1,9 +1,11 @@
-package com.shootdoori.match.controller;
+package com.shootdoori.match.team.controller;
 
-import com.shootdoori.match.dto.CreateTeamResponseDto;
-import com.shootdoori.match.dto.TeamDetailResponseDto;
-import com.shootdoori.match.dto.TeamRequestDto;
 import com.shootdoori.match.resolver.LoginUser;
+import com.shootdoori.match.team.dto.CreateTeamResponseDto;
+import com.shootdoori.match.team.dto.TeamDetailResponseDto;
+import com.shootdoori.match.team.dto.TeamRequestDto;
+import com.shootdoori.match.team.service.TeamCommandService;
+import com.shootdoori.match.team.service.TeamQueryService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,28 +22,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/teams")
 public class TeamController {
+
+    private final TeamQueryService teamQueryService;
+    private final TeamCommandService teamCommandService;
+
+    public TeamController(TeamQueryService teamQueryService,
+        TeamCommandService teamCommandService) {
+        this.teamQueryService = teamQueryService;
+        this.teamCommandService = teamCommandService;
+    }
+
     @PostMapping
     public ResponseEntity<CreateTeamResponseDto> create(
         @RequestBody TeamRequestDto requestDto,
         @LoginUser Long userId) {
 
-        return null;
+        return new ResponseEntity<>(teamCommandService.create(requestDto, userId),
+            HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TeamDetailResponseDto> findById(@PathVariable Long id) {
 
-        return null;
+        return new ResponseEntity<>(teamQueryService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<Page<TeamDetailResponseDto>> findAllByUniversity(
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "10") int size,
-        @RequestParam String university,
-        @RequestParam(defaultValue = "false") boolean includeDeleted
+        @RequestParam String university
     ) {
-        return null;
+        return new ResponseEntity<>(teamQueryService.findAllByUniversity(page, size, university),
+            HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
@@ -50,20 +63,15 @@ public class TeamController {
         @RequestBody TeamRequestDto requestDto,
         @LoginUser Long userId
     ) {
-        return null;
+        return new ResponseEntity<>(teamCommandService.update(id, requestDto, userId),
+            HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id,
         @LoginUser Long userId) {
+        teamCommandService.delete(id, userId);
 
-        return null;
-    }
-
-    @PostMapping("/{id}")
-    public ResponseEntity<TeamDetailResponseDto> restore(@PathVariable Long id,
-        @LoginUser Long userId) {
-
-        return null;
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

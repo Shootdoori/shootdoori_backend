@@ -1,4 +1,4 @@
-package com.shootdoori.match.entity.team;
+package com.shootdoori.match.team.domain.value;
 
 public record UniversityName(String universityName) {
 

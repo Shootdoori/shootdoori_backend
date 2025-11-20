@@ -1,4 +1,4 @@
-package com.shootdoori.match.entity.team;
+package com.shootdoori.match.team.domain;
 
 public enum TeamType {
     CENTRAL_CLUB("중앙동아리"),

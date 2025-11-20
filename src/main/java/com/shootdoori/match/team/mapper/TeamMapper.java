@@ -1,7 +1,10 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.team.mapper;
 
-import com.shootdoori.match.entity.team.Team;
-import com.shootdoori.match.entity.team.TeamType;
+import com.shootdoori.match.team.domain.Team;
+import com.shootdoori.match.team.domain.TeamType;
+import com.shootdoori.match.team.dto.CreateTeamResponseDto;
+import com.shootdoori.match.team.dto.TeamDetailResponseDto;
+import com.shootdoori.match.team.dto.TeamRequestDto;
 
 public class TeamMapper {
 
@@ -10,7 +13,6 @@ public class TeamMapper {
 
     public Team toEntity(TeamRequestDto requestDto, Long captainId) {
         return Team.of(
-            captainId,
             requestDto.name(),
             requestDto.university(),
             parseToTeamType(requestDto.teamType()),
