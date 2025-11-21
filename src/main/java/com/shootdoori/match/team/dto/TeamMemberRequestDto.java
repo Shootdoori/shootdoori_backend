@@ -1,4 +1,4 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.team.dto;
 
 public record TeamMemberRequestDto(
     Long userId,

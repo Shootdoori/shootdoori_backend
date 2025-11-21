@@ -6,17 +6,22 @@ import com.shootdoori.match.team.dto.TeamDetailResponseDto;
 import com.shootdoori.match.team.dto.TeamRequestDto;
 import com.shootdoori.match.team.mapper.TeamMapper;
 import com.shootdoori.match.team.repository.TeamRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @Transactional
 public class TeamCommandService {
 
     private final TeamQueryService teamQueryService;
+    private final TeamMemberQueryService teamMemberQueryService;
     private final TeamRepository teamRepository;
     private final TeamMapper teamMapper;
 
-    public TeamCommandService(TeamQueryService teamQueryService, TeamRepository teamRepository, TeamMapper teamMapper) {
+    public TeamCommandService(TeamQueryService teamQueryService, TeamMemberQueryService teamMemberQueryService, TeamRepository teamRepository,
+        TeamMapper teamMapper) {
         this.teamQueryService = teamQueryService;
+        this.teamMemberQueryService = teamMemberQueryService;
         this.teamRepository = teamRepository;
         this.teamMapper = teamMapper;
     }
@@ -28,6 +33,8 @@ public class TeamCommandService {
     }
 
     public TeamDetailResponseDto update(Long id, TeamRequestDto requestDto, Long userId) {
+        teamMemberQueryService.validateLeaderOrViceLeader(id, userId);
+
         Team team = teamQueryService.findByIdForEntity(id);
 
         team.changeTeamInfo(requestDto.name(), requestDto.university(), requestDto.description(),

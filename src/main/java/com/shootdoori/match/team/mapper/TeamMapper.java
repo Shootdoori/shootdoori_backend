@@ -5,7 +5,9 @@ import com.shootdoori.match.team.domain.TeamType;
 import com.shootdoori.match.team.dto.CreateTeamResponseDto;
 import com.shootdoori.match.team.dto.TeamDetailResponseDto;
 import com.shootdoori.match.team.dto.TeamRequestDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TeamMapper {
 
     private TeamMapper() {

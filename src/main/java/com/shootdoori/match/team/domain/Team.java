@@ -1,6 +1,7 @@
 package com.shootdoori.match.team.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
+import com.shootdoori.match.team.domain.TeamType;
 import com.shootdoori.match.team.domain.value.Description;
 import com.shootdoori.match.team.domain.value.TeamName;
 import com.shootdoori.match.team.domain.value.UniversityName;
