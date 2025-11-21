@@ -65,6 +65,8 @@ public class TeamMemberCommandService {
         loginMember.validateJoinDecisionAuthority();
 
         TeamMember targetMember = teamMemberQueryService.findByTeamIdAndUserIdForEntity(teamId, userId);
+        loginMember.validateKickAuthority(targetMember);
+
         teamMemberRepository.delete(targetMember);
     }
 
