@@ -81,7 +81,7 @@ public class Team {
         return timeStamp.getCreatedAt();
     }
 
-    public void changeTeamInfo(String name, String university, String description, Long userId) {
+    public void changeTeamInfo(String name, String university, String description) {
         this.teamName = TeamName.of(name);
         this.universityName = UniversityName.of(university);
         this.description = Description.of(description);
