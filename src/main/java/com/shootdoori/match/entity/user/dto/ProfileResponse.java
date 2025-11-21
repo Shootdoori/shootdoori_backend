@@ -1,4 +1,4 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.entity.user.dto;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,6 @@ public record ProfileResponse(
     String department,
     String studentYear,
     String bio,
-    LocalDateTime createdAt,
-    Long teamId
+    LocalDateTime createdAt
 ) {
 }

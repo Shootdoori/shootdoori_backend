@@ -1,4 +1,4 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.entity.user.dto;
 
 import com.shootdoori.match.policy.PasswordPolicy;
 import jakarta.validation.constraints.Email;
@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record ProfileCreateRequest(
+public record UserCreateRequest(
     @NotBlank(message = "이름은 필수 입력 값입니다.")
     @Size(min = 2, max = 100, message = "이름은 2자 이상 100자 이하로 입력해주세요.")
     String name,
