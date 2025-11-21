@@ -2,8 +2,8 @@ package com.shootdoori.match.controller;
 
 import com.shootdoori.match.dto.AuthTokenResponse;
 import com.shootdoori.match.dto.LoginRequest;
-import com.shootdoori.match.dto.ProfileCreateRequest;
 import com.shootdoori.match.dto.TokenRefreshRequest;
+import com.shootdoori.match.entity.user.dto.UserCreateRequest;
 import com.shootdoori.match.resolver.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,7 +32,7 @@ public class LoginController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthTokenResponse> register(
-        @Valid @RequestBody ProfileCreateRequest profileCreateRequest,
+        @Valid @RequestBody UserCreateRequest profileCreateRequest,
         HttpServletRequest request
     ) {
         return null;
