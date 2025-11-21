@@ -1,12 +1,10 @@
 package com.shootdoori.match.team.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.shootdoori.match.team.domain.Team;
 import com.shootdoori.match.team.domain.TeamType;
-import com.shootdoori.match.team.dto.CreateTeamResponseDto;
 import com.shootdoori.match.team.dto.TeamDetailResponseDto;
 import com.shootdoori.match.team.dto.TeamRequestDto;
 import com.shootdoori.match.team.mapper.TeamMapper;
