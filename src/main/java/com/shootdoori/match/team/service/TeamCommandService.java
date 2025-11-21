@@ -18,7 +18,8 @@ public class TeamCommandService {
     private final TeamRepository teamRepository;
     private final TeamMapper teamMapper;
 
-    public TeamCommandService(TeamQueryService teamQueryService, TeamMemberQueryService teamMemberQueryService, TeamRepository teamRepository,
+    public TeamCommandService(TeamQueryService teamQueryService,
+        TeamMemberQueryService teamMemberQueryService, TeamRepository teamRepository,
         TeamMapper teamMapper) {
         this.teamQueryService = teamQueryService;
         this.teamMemberQueryService = teamMemberQueryService;
@@ -37,8 +38,8 @@ public class TeamCommandService {
 
         Team team = teamQueryService.findByIdForEntity(id);
 
-        team.changeTeamInfo(requestDto.name(), requestDto.university(), requestDto.description(),
-            userId);
+        team.changeTeamInfo(requestDto.name(), requestDto.teamType(), requestDto.university(),
+            requestDto.description());
 
         return teamMapper.toTeamDetailResponse(team);
     }
