@@ -6,7 +6,7 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class Bio {
 
-    @Column(length = 500)
+    @Column(name = "bio",length = 500)
     private String value;
 
     protected Bio() {}
