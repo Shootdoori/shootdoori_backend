@@ -1,6 +1,8 @@
 package com.shootdoori.match.team.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
+import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.NoPermissionException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -91,5 +93,11 @@ public class TeamMember {
 
     public void validateJoinDecisionAuthority() {
         role.validateJoinDecisionAuthority();
+    }
+
+    public void validateKickAuthority(TeamMember targetMember) {
+        if (!role.canKick(targetMember.getRole())) {
+            throw new NoPermissionException(ErrorCode.NO_PERMISSION);
+        }
     }
 }

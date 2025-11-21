@@ -34,10 +34,6 @@ public enum TeamMemberRole {
 //            : TeamMemberRole.fromDisplayName(roleDisplayName);
 //    }
 
-    public static boolean isNotLeader(TeamMemberRole nowRole) {
-        return nowRole != LEADER;
-    }
-
     public boolean canKick(TeamMemberRole targetRole) {
         if (targetRole == LEADER) {
             return false;
