@@ -6,8 +6,10 @@ import com.shootdoori.match.team.dto.TeamDetailResponseDto;
 import com.shootdoori.match.team.dto.TeamRequestDto;
 import com.shootdoori.match.team.mapper.TeamMapper;
 import com.shootdoori.match.team.repository.TeamRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 @Transactional
 public class TeamCommandService {
 
