@@ -37,8 +37,7 @@ public class TeamCommandService {
 
         Team team = teamQueryService.findByIdForEntity(id);
 
-        team.changeTeamInfo(requestDto.name(), requestDto.university(), requestDto.description(),
-            userId);
+        team.changeTeamInfo(requestDto.name(), requestDto.university(), requestDto.description());
 
         return teamMapper.toTeamDetailResponse(team);
     }
