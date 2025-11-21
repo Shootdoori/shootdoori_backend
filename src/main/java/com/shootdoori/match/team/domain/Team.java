@@ -81,8 +81,9 @@ public class Team {
         return timeStamp.getCreatedAt();
     }
 
-    public void changeTeamInfo(String name, String university, String description) {
+    public void changeTeamInfo(String name, String teamType, String university, String description) {
         this.teamName = TeamName.of(name);
+        this.teamType = TeamType.fromDisplayName(teamType);
         this.universityName = UniversityName.of(university);
         this.description = Description.of(description);
     }

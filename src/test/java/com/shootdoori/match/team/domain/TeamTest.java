@@ -20,14 +20,16 @@ class TeamTest {
     void changeTeamInfo() {
         // given
         String newName = "닭갈비 FC";
+        String newTeamType = "과동아리";
         String newUniversity = "강원대학교";
         String newDescription = "변경된 설명란";
 
         // when
-        team.changeTeamInfo(newName, newUniversity, newDescription);
+        team.changeTeamInfo(newName, newTeamType, newUniversity, newDescription);
 
         // then
         assertThat(team.getTeamName().teamName()).isEqualTo(newName);
+        assertThat(team.getTeamType().getDisplayName()).isEqualTo(newTeamType);
         assertThat(team.getUniversityName().universityName()).isEqualTo(newUniversity);
         assertThat(team.getDescription().description()).isEqualTo(newDescription);
     }
