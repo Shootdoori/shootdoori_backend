@@ -5,7 +5,8 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Department {
-    @Column(nullable = false, length = 100)
+
+    @Column(name = "department", nullable = false, length = 100)
     private String value;
 
     protected Department() {}
