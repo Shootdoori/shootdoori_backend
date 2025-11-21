@@ -1,4 +1,4 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.entity.user.dto;
 
 import jakarta.validation.constraints.Size;
 
