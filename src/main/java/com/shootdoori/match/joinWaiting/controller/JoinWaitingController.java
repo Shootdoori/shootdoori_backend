@@ -41,7 +41,8 @@ public class JoinWaitingController {
         @LoginUser Long loginUserId,
         @RequestBody JoinWaitingRequestDto requestDto
     ) {
-        return null;
+        return new ResponseEntity<>(
+            joinWaitingCommandService.create(teamId, 1L, requestDto), HttpStatus.CREATED);
     }
 
     @PostMapping("/api/teams/{teamId}/join-waiting/{joinWaitingId}/approve")
