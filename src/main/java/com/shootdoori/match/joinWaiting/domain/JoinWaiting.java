@@ -117,6 +117,13 @@ public class JoinWaiting {
         this.decisionReason = decisionReason;
     }
 
+    public void reject(Long loginUserId, String decisionReason) {
+        validatePending();
+        this.status = JoinWaitingStatus.REJECTED;
+        this.processorId = loginUserId;
+        this.decisionReason = decisionReason;
+    }
+
     private void validatePending() {
         if (!status.isPending()) {
             throw new JoinWaitingNotPendingException();

@@ -54,4 +54,16 @@ public class JoinWaitingCommandService {
 
         return joinWaitingMapper.toResponseDto(joinWaiting);
     }
+
+    public JoinWaitingResponseDto reject(Long teamId, Long joinWaitingId, Long loginUserId,
+        JoinWaitingRejectRequestDto requestDto) {
+
+        JoinWaiting joinWaiting = joinWaitingQueryService.findByIdForEntity(joinWaitingId);
+
+        teamMemberQueryService.validateLeaderOrViceLeader(teamId, loginUserId);
+
+        joinWaiting.reject(loginUserId, requestDto.decisionReason());
+
+        return joinWaitingMapper.toResponseDto(joinWaiting);
+    }
 }
