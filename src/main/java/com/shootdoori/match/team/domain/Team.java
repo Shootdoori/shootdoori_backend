@@ -1,12 +1,9 @@
 package com.shootdoori.match.team.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
-import com.shootdoori.match.team.domain.TeamType;
 import com.shootdoori.match.team.domain.value.Description;
 import com.shootdoori.match.team.domain.value.TeamName;
 import com.shootdoori.match.team.domain.value.UniversityName;
-import com.shootdoori.match.exception.common.ErrorCode;
-import com.shootdoori.match.exception.common.NoPermissionException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -17,13 +14,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "team")
 @EntityListeners(AuditingEntityListener.class)
 public class Team {
+
     @Id
     @GeneratedValue
     private Long id;
@@ -44,7 +41,8 @@ public class Team {
     @Embedded
     private TimeStamp timeStamp = new TimeStamp();
 
-    protected Team() { }
+    protected Team() {
+    }
 
     protected Team(String teamName, String university, TeamType teamType, String description) {
         this.teamName = TeamName.of(teamName);
@@ -53,7 +51,8 @@ public class Team {
         this.description = Description.of(description);
     }
 
-    public static Team of(String teamName, String university, TeamType teamType, String description) {
+    public static Team of(String teamName, String university, TeamType teamType,
+        String description) {
         return new Team(teamName, university, teamType, description);
     }
 
@@ -81,7 +80,8 @@ public class Team {
         return timeStamp.getCreatedAt();
     }
 
-    public void changeTeamInfo(String name, String teamType, String university, String description) {
+    public void changeTeamInfo(String name, String teamType, String university,
+        String description) {
         this.teamName = TeamName.of(name);
         this.teamType = TeamType.fromDisplayName(teamType);
         this.universityName = UniversityName.of(university);
