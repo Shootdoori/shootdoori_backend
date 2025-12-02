@@ -76,7 +76,9 @@ public class JoinWaitingController {
         @LoginUser Long loginUserId,
         @RequestBody JoinWaitingCancelRequestDto requestDto
     ) {
-        return null;
+        return new ResponseEntity<>(
+            joinWaitingCommandService.cancel(teamId, joinWaitingId, loginUserId, requestDto),
+            HttpStatus.OK);
     }
 
     @GetMapping("/api/teams/{teamId}/join-waiting")

@@ -2,6 +2,7 @@ package com.shootdoori.match.joinWaiting.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
 import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.NoPermissionException;
 import com.shootdoori.match.exception.domain.joinwaiting.JoinWaitingNotPendingException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -15,7 +16,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import javax.naming.NoPermissionException;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -122,6 +122,19 @@ public class JoinWaiting {
         this.status = JoinWaitingStatus.REJECTED;
         this.processorId = loginUserId;
         this.decisionReason = decisionReason;
+    }
+
+    public void cancel(Long loginUserId, String decisionReason) {
+        validatePending();
+        this.status = JoinWaitingStatus.CANCELED;
+        this.processorId = loginUserId;
+        this.decisionReason = decisionReason;
+    }
+
+    public void validateApplicant(Long loginUserId) {
+        if (!applicantId.equals(loginUserId)) {
+            throw new NoPermissionException();
+        }
     }
 
     private void validatePending() {

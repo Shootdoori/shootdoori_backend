@@ -2,6 +2,7 @@ package com.shootdoori.match.joinWaiting.service;
 
 import com.shootdoori.match.joinWaiting.domain.JoinWaiting;
 import com.shootdoori.match.joinWaiting.dto.JoinWaitingApproveRequestDto;
+import com.shootdoori.match.joinWaiting.dto.JoinWaitingCancelRequestDto;
 import com.shootdoori.match.joinWaiting.dto.JoinWaitingRejectRequestDto;
 import com.shootdoori.match.joinWaiting.dto.JoinWaitingRequestDto;
 import com.shootdoori.match.joinWaiting.dto.JoinWaitingResponseDto;
@@ -63,6 +64,18 @@ public class JoinWaitingCommandService {
         teamMemberQueryService.validateLeaderOrViceLeader(teamId, loginUserId);
 
         joinWaiting.reject(loginUserId, requestDto.decisionReason());
+
+        return joinWaitingMapper.toResponseDto(joinWaiting);
+    }
+
+    public JoinWaitingResponseDto cancel(Long teamId, Long joinWaitingId, Long loginUserId,
+        JoinWaitingCancelRequestDto requestDto) {
+
+        JoinWaiting joinWaiting = joinWaitingQueryService.findByIdForEntity(joinWaitingId);
+
+        joinWaiting.validateApplicant(loginUserId);
+
+        joinWaiting.cancel(loginUserId, requestDto.decisionReason());
 
         return joinWaitingMapper.toResponseDto(joinWaiting);
     }
