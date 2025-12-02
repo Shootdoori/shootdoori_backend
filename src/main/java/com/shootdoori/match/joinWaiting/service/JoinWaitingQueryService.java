@@ -1,5 +1,8 @@
 package com.shootdoori.match.joinWaiting.service;
 
+import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.NotFoundException;
+import com.shootdoori.match.joinWaiting.domain.JoinWaiting;
 import com.shootdoori.match.joinWaiting.domain.JoinWaitingStatus;
 import com.shootdoori.match.joinWaiting.domain.JoinWaitingType;
 import com.shootdoori.match.joinWaiting.dto.JoinWaitingResponseDto;
@@ -24,6 +27,11 @@ public class JoinWaitingQueryService {
         this.joinWaitingMapper = joinWaitingMapper;
     }
 
+    public JoinWaiting findByIdForEntity(Long id) {
+        return joinWaitingRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.JOIN_WAITING_NOT_FOUND));
+    }
+
     public Page<JoinWaitingResponseDto> findPending(Long teamId, JoinWaitingStatus status,
         JoinWaitingType type, Pageable pageable) {
         return joinWaitingRepository.findByTeamIdAndStatusAndJoinWaitingType(teamId, status, type,
@@ -32,7 +40,8 @@ public class JoinWaitingQueryService {
 
     public Page<JoinWaitingResponseDto> findAllByApplicantIdAndJoinWaitingType(Long applicantId,
         JoinWaitingType type, Pageable pageable) {
-        return joinWaitingRepository.findAllByApplicantIdAndJoinWaitingType(applicantId, type, pageable)
+        return joinWaitingRepository.findAllByApplicantIdAndJoinWaitingType(applicantId, type,
+                pageable)
             .map(joinWaitingMapper::toResponseDto);
     }
 }

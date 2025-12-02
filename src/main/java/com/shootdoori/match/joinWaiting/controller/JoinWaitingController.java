@@ -52,7 +52,9 @@ public class JoinWaitingController {
         @LoginUser Long loginUserId,
         @RequestBody JoinWaitingApproveRequestDto requestDto
     ) {
-        return null;
+        return new ResponseEntity<>(
+            joinWaitingCommandService.approve(teamId, joinWaitingId, loginUserId, requestDto),
+            HttpStatus.OK);
     }
 
     @PostMapping("/api/teams/{teamId}/join-waiting/{joinWaitingId}/reject")

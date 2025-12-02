@@ -1,6 +1,8 @@
 package com.shootdoori.match.joinWaiting.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
+import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.domain.joinwaiting.JoinWaitingNotPendingException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -13,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import javax.naming.NoPermissionException;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -105,5 +108,18 @@ public class JoinWaiting {
 
     public LocalDateTime getUpdatedAt() {
         return timeStamp.getUpdatedAt();
+    }
+
+    public void approve(Long loginUserId, String decisionReason) {
+        validatePending();
+        this.status = JoinWaitingStatus.APPROVED;
+        this.processorId = loginUserId;
+        this.decisionReason = decisionReason;
+    }
+
+    private void validatePending() {
+        if (!status.isPending()) {
+            throw new JoinWaitingNotPendingException();
+        }
     }
 }
