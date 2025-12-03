@@ -12,12 +12,18 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "team")
+@Table(
+    name = "team",
+    indexes = {
+        @Index(name = "idx_team_university_name", columnList = "university_name")
+    }
+)
 @EntityListeners(AuditingEntityListener.class)
 public class Team {
 
