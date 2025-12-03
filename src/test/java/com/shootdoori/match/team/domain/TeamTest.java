@@ -28,9 +28,9 @@ class TeamTest {
         team.changeTeamInfo(newName, newTeamType, newUniversity, newDescription);
 
         // then
-        assertThat(team.getTeamName().teamName()).isEqualTo(newName);
+        assertThat(team.getTeamName()).isEqualTo(newName);
         assertThat(team.getTeamType().getDisplayName()).isEqualTo(newTeamType);
-        assertThat(team.getUniversityName().universityName()).isEqualTo(newUniversity);
-        assertThat(team.getDescription().description()).isEqualTo(newDescription);
+        assertThat(team.getUniversityName()).isEqualTo(newUniversity);
+        assertThat(team.getDescription()).isEqualTo(newDescription);
     }
 }

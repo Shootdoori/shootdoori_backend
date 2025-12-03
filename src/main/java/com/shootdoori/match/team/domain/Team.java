@@ -66,20 +66,20 @@ public class Team {
         return id;
     }
 
-    public TeamName getTeamName() {
-        return teamName;
+    public String getTeamName() {
+        return teamName.getTeamName();
     }
 
     public TeamType getTeamType() {
         return teamType;
     }
 
-    public UniversityName getUniversityName() {
-        return universityName;
+    public String getUniversityName() {
+        return universityName.getUniversityName();
     }
 
-    public Description getDescription() {
-        return description;
+    public String getDescription() {
+        return description.getDescription();
     }
 
     public LocalDateTime getCreatedAt() {
