@@ -44,7 +44,7 @@ public class Team {
     protected Team() {
     }
 
-    protected Team(String teamName, String university, TeamType teamType, String description) {
+    private Team(String teamName, String university, TeamType teamType, String description) {
         this.teamName = TeamName.of(teamName);
         this.universityName = UniversityName.of(university);
         this.teamType = teamType;
