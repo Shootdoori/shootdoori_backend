@@ -61,7 +61,7 @@ public class JoinWaiting {
     protected JoinWaiting() {
     }
 
-    protected JoinWaiting(Long teamId, Long applicantId, String message,
+    private JoinWaiting(Long teamId, Long applicantId, String message,
         JoinWaitingType joinWaitingType) {
         this.teamId = teamId;
         this.applicantId = applicantId;

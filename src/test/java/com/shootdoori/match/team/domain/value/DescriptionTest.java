@@ -19,7 +19,7 @@ class DescriptionTest {
         Description description = Description.of(validDescription);
         
         // then
-        assertThat(description.description()).isEqualTo(validDescription);
+        assertThat(description.getDescription()).isEqualTo(validDescription);
     }
     
     @Test
@@ -43,7 +43,7 @@ class DescriptionTest {
         Description description = Description.of(nullDescription);
         
         // then
-        assertThat(description.description()).isEqualTo(null);
+        assertThat(description.getDescription()).isEqualTo(null);
     }
 
     @Test
@@ -56,6 +56,6 @@ class DescriptionTest {
         Description description = Description.of(blankDescription);
 
         // then
-        assertThat(description.description()).isEqualTo(null);
+        assertThat(description.getDescription()).isEqualTo(null);
     }
 }

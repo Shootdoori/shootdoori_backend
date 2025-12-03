@@ -28,12 +28,6 @@ public enum TeamMemberRole {
         throw new IllegalArgumentException("Unknown role: " + displayName);
     }
 
-//    public static TeamMemberRole determineRole(JoinWaiting joinWaiting, String roleDisplayName) {
-//        return joinWaiting.isMercenary()
-//            ? TeamMemberRole.MERCENARY
-//            : TeamMemberRole.fromDisplayName(roleDisplayName);
-//    }
-
     public boolean canKick(TeamMemberRole targetRole) {
         if (targetRole == LEADER) {
             return false;

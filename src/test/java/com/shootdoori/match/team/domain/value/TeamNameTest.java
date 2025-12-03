@@ -20,7 +20,7 @@ class TeamNameTest {
         TeamName teamName = TeamName.of(validName);
 
         // then
-        assertThat(teamName.teamName()).isEqualTo(validName);
+        assertThat(teamName.getTeamName()).isEqualTo(validName);
     }
 
     @Test

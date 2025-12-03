@@ -12,12 +12,18 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "team")
+@Table(
+    name = "team",
+    indexes = {
+        @Index(name = "idx_team_university_name", columnList = "university_name")
+    }
+)
 @EntityListeners(AuditingEntityListener.class)
 public class Team {
 
@@ -44,7 +50,7 @@ public class Team {
     protected Team() {
     }
 
-    protected Team(String teamName, String university, TeamType teamType, String description) {
+    private Team(String teamName, String university, TeamType teamType, String description) {
         this.teamName = TeamName.of(teamName);
         this.universityName = UniversityName.of(university);
         this.teamType = teamType;
@@ -60,20 +66,20 @@ public class Team {
         return id;
     }
 
-    public TeamName getTeamName() {
-        return teamName;
+    public String getTeamName() {
+        return teamName.getTeamName();
     }
 
     public TeamType getTeamType() {
         return teamType;
     }
 
-    public UniversityName getUniversityName() {
-        return universityName;
+    public String getUniversityName() {
+        return universityName.getUniversityName();
     }
 
-    public Description getDescription() {
-        return description;
+    public String getDescription() {
+        return description.getDescription();
     }
 
     public LocalDateTime getCreatedAt() {
