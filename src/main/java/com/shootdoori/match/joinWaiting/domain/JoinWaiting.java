@@ -1,7 +1,6 @@
 package com.shootdoori.match.joinWaiting.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
-import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NoPermissionException;
 import com.shootdoori.match.exception.domain.joinwaiting.JoinWaitingNotPendingException;
 import jakarta.persistence.Column;
