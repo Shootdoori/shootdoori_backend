@@ -55,8 +55,8 @@ class TeamCommandServiceTest {
         teamCommandService.update(teamId, requestDto, userId);
 
         // then
-        assertThat(team.getTeamName().teamName()).isEqualTo("수정된이름");
-        assertThat(team.getUniversityName().universityName()).isEqualTo("수정된대학");
-        assertThat(team.getDescription().description()).isEqualTo("수정된설명");
+        assertThat(team.getTeamName()).isEqualTo("수정된이름");
+        assertThat(team.getUniversityName()).isEqualTo("수정된대학");
+        assertThat(team.getDescription()).isEqualTo("수정된설명");
     }
 }

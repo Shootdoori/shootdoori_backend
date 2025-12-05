@@ -16,7 +16,7 @@ public class UserMapper {
             user.getEmail().value(),
             user.getKakaoTalkId().value(),
             user.getPosition().name(),
-            user.getUniversity().universityName(),
+            user.getUniversity().getUniversityName(),
             user.getDepartment().value(),
             user.getStudentYear().value(),
             user.getBio().value(),

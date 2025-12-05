@@ -19,7 +19,7 @@ class UniversityNameTest {
         UniversityName universityName = UniversityName.of(validName);
 
         // then
-        assertThat(universityName.universityName()).isEqualTo(validName);
+        assertThat(universityName.getUniversityName()).isEqualTo(validName);
     }
 
     @Test

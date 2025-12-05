@@ -1,16 +1,14 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.joinWaiting.dto;
 
 import java.time.LocalDateTime;
 
 public record JoinWaitingResponseDto(Long id,
-                                     String applicantName,
                                      Long teamId,
-                                     String teamName,
                                      Long applicantId,
                                      String status,
                                      String decisionReason,
-                                     String decidedBy,
+                                     Long processorId,
                                      LocalDateTime decidedAt,
-                                     boolean isMercenary) {
+                                     String joinWaitingType) {
 
 }

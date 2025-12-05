@@ -47,7 +47,7 @@ public class TeamMember {
     protected TeamMember() {
     }
 
-    protected TeamMember(Team team, Long userId, String role) {
+    private TeamMember(Team team, Long userId, String role) {
         this.team = team;
         this.userId = userId;
         this.role = TeamMemberRole.fromDisplayName(role);
