@@ -1,5 +1,7 @@
 package com.shootdoori.match.entity.user.value;
 
+import com.shootdoori.match.exception.common.BusinessException;
+import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.policy.PasswordPolicy;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

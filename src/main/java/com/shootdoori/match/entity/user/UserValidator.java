@@ -1,5 +1,6 @@
 package com.shootdoori.match.entity.user;
 
+import com.shootdoori.match.entity.user.repository.UserRepository;
 import com.shootdoori.match.entity.user.value.Email;
 import com.shootdoori.match.exception.common.DuplicatedException;
 import com.shootdoori.match.exception.common.ErrorCode;

@@ -1,20 +1,24 @@
-package com.shootdoori.match.util;
+package com.shootdoori.match.entity.user.util;
 
+import com.shootdoori.match.entity.user.User;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.UnauthorizedException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
-
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
@@ -25,39 +29,47 @@ public class JwtUtil {
     private static final String BEARER = "Bearer ";
 
     public JwtUtil(@Value("${jwt.secret}") String secret,
-                   @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidity,
-                   @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidity) {
+        @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidity,
+        @Value("${jwt.refresh-token-validity-in-seconds}") long refreshTokenValidity) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.accessTokenValidityInMilliseconds = accessTokenValidity * 1000;
         this.refreshTokenValidityInMilliseconds = refreshTokenValidity * 1000;
     }
 
-//    public String generateAccessToken(User user) {
-//        Date now = new Date();
-//        Date expirationTime = new Date(now.getTime() + accessTokenValidityInMilliseconds);
-//
-//        return Jwts.builder()
-//            .setSubject(user.getId().toString())
-//            .setId(UUID.randomUUID().toString())
-//            .claim("email", user.getEmail())
-//            .setIssuedAt(now)
-//            .setExpiration(expirationTime)
-//            .signWith(secretKey, SignatureAlgorithm.HS256)
-//            .compact();
-//    }
-//
-//    public String generateRefreshToken(User user) {
-//        Date now = new Date();
-//        Date expirationTime = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
-//
-//        return Jwts.builder()
-//            .setSubject(user.getId().toString())
-//            .setId(UUID.randomUUID().toString())
-//            .setIssuedAt(now)
-//            .setExpiration(expirationTime)
-//            .signWith(secretKey, SignatureAlgorithm.HS256)
-//            .compact();
-//    }
+    public long getAccessTokenValidityInMilliseconds() {
+        return accessTokenValidityInMilliseconds;
+    }
+
+    public long getRefreshTokenValidityInMilliseconds() {
+        return refreshTokenValidityInMilliseconds;
+    }
+
+    public String generateAccessToken(User user) {
+        Date now = new Date();
+        Date expirationTime = new Date(now.getTime() + accessTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+            .setSubject(user.getId().toString())
+            .setId(UUID.randomUUID().toString())
+            .claim("email", user.getEmail())
+            .setIssuedAt(now)
+            .setExpiration(expirationTime)
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact();
+    }
+
+    public String generateRefreshToken(User user) {
+        Date now = new Date();
+        Date expirationTime = new Date(now.getTime() + refreshTokenValidityInMilliseconds);
+
+        return Jwts.builder()
+            .setSubject(user.getId().toString())
+            .setId(UUID.randomUUID().toString())
+            .setIssuedAt(now)
+            .setExpiration(expirationTime)
+            .signWith(secretKey, SignatureAlgorithm.HS256)
+            .compact();
+    }
 
     public String extractToken(HttpServletRequest request) {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);

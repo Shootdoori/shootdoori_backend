@@ -1,5 +1,6 @@
-package com.shootdoori.match.entity.user;
+package com.shootdoori.match.entity.user.mapper;
 
+import com.shootdoori.match.entity.user.User;
 import com.shootdoori.match.entity.user.dto.ProfileResponse;
 import org.springframework.stereotype.Component;
 

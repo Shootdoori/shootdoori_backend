@@ -1,9 +1,10 @@
 package com.shootdoori.match.entity.user.service;
 
 import com.shootdoori.match.entity.user.User;
-import com.shootdoori.match.entity.user.UserMapper;
-import com.shootdoori.match.entity.user.UserRepository;
+import com.shootdoori.match.entity.user.mapper.UserMapper;
+import com.shootdoori.match.entity.user.repository.UserRepository;
 import com.shootdoori.match.entity.user.dto.ProfileResponse;
+import com.shootdoori.match.entity.user.value.Email;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ public class UserQueryService {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ErrorCode.PROFILE_NOT_FOUND));
         return userMapper.toProfileResponse(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(Email.of(email))
+            .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
     public User findByIdForEntity(Long id) {

@@ -3,8 +3,8 @@ package com.shootdoori.match.entity.user.service;
 import com.shootdoori.match.entity.common.Position;
 import com.shootdoori.match.entity.common.SkillLevel;
 import com.shootdoori.match.entity.user.User;
-import com.shootdoori.match.entity.user.UserMapper;
-import com.shootdoori.match.entity.user.UserRepository;
+import com.shootdoori.match.entity.user.mapper.UserMapper;
+import com.shootdoori.match.entity.user.repository.UserRepository;
 import com.shootdoori.match.entity.user.UserValidator;
 import com.shootdoori.match.entity.user.dto.ProfileResponse;
 import com.shootdoori.match.entity.user.dto.ProfileUpdateRequest;
@@ -15,14 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserCommandService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final UserValidator userValidator;
     private final UserQueryService userQueryService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, UserValidator userValidator, UserQueryService userQueryService) {
+    public UserCommandService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper userMapper, UserValidator userValidator, UserQueryService userQueryService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;

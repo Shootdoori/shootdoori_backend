@@ -1,15 +1,18 @@
-package com.shootdoori.match.controller;
+package com.shootdoori.match.entity.user.controller;
 
-import com.shootdoori.match.dto.AuthTokenResponse;
+import com.shootdoori.match.entity.user.dto.AuthTokenResponse;
 import com.shootdoori.match.dto.LoginRequest;
 import com.shootdoori.match.dto.TokenRefreshRequest;
 import com.shootdoori.match.entity.user.dto.UserCreateRequest;
+import com.shootdoori.match.entity.user.service.AuthService;
 import com.shootdoori.match.resolver.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,14 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class LoginController {
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private final AuthService authService;
+
+    public LoginController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthTokenResponse> login(
         @Valid @RequestBody LoginRequest loginRequest,
         HttpServletRequest request
     ) {
+        String userAgent = request.getHeader(HttpHeaders.USER_AGENT);
 
-        return null;
+        return new ResponseEntity<>(authService.login(loginRequest, userAgent), HttpStatus.OK);
     }
 
     @PostMapping("/register")

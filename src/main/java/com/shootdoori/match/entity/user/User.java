@@ -86,6 +86,14 @@ public class User {
         return this.name;
     }
 
+    public String getPassword() {
+        return password.value();
+    }
+
+    public void setPassword(Password password) {
+        this.password = password;
+    }
+
     public Email getEmail() {
         return email;
     }
