@@ -3,9 +3,20 @@ package com.shootdoori.match.entity.user;
 import com.shootdoori.match.entity.common.Position;
 import com.shootdoori.match.entity.common.SkillLevel;
 import com.shootdoori.match.entity.common.TimeStamp;
-import com.shootdoori.match.entity.user.value.*;
+import com.shootdoori.match.entity.user.value.Bio;
+import com.shootdoori.match.entity.user.value.Department;
+import com.shootdoori.match.entity.user.value.Email;
+import com.shootdoori.match.entity.user.value.KakaoTalkId;
+import com.shootdoori.match.entity.user.value.Password;
+import com.shootdoori.match.entity.user.value.StudentYear;
+import com.shootdoori.match.entity.user.value.UserName;
 import com.shootdoori.match.team.domain.value.UniversityName;
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 
 @Entity
 public class User {
@@ -46,7 +57,8 @@ public class User {
     @Embedded
     private TimeStamp timeStamp = new TimeStamp();
 
-    protected User() {}
+    protected User() {
+    }
 
     public User(
         UserName name,

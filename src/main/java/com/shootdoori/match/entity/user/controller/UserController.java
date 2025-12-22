@@ -20,39 +20,39 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<ProfileResponse> postProfile(
+    public ResponseEntity<ProfileResponse> create(
         @Valid @RequestBody UserCreateRequest request
     ) {
-        return new ResponseEntity<>(userCommandService.createUser(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(userCommandService.create(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileResponse> getProfile(
+    public ResponseEntity<ProfileResponse> findById(
         @PathVariable Long id
     ) {
-        return new ResponseEntity<>(userCommandService.getUser(id), HttpStatus.OK);
+        return new ResponseEntity<>(userCommandService.findById(id), HttpStatus.OK);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<ProfileResponse> getMyProfile(
+    public ResponseEntity<ProfileResponse> findByLoginUser(
         @LoginUser Long id
     ) {
-        return new ResponseEntity<>(userCommandService.getUser(id), HttpStatus.OK);
+        return new ResponseEntity<>(userCommandService.findById(id), HttpStatus.OK);
     }
 
     @PutMapping("/me")
-    public ResponseEntity<ProfileResponse> updateProfile(
+    public ResponseEntity<ProfileResponse> update(
         @LoginUser Long userId,
         @Valid @RequestBody ProfileUpdateRequest request
     ) {
-        return new ResponseEntity<>(userCommandService.updateUser(userId, request), HttpStatus.OK);
+        return new ResponseEntity<>(userCommandService.update(userId, request), HttpStatus.OK);
     }
 
     @DeleteMapping("/me")
-    public ResponseEntity<Void> deleteProfile(
+    public ResponseEntity<Void> delete(
         @LoginUser Long userId
     ) {
-        userCommandService.deleteUser(userId);
+        userCommandService.delete(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

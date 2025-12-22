@@ -1,5 +1,6 @@
 package com.shootdoori.match.dto;
 
+import com.shootdoori.match.entity.user.dto.UserCreateRequest;
 import com.shootdoori.match.policy.PasswordPolicy;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -20,4 +21,7 @@ public record LoginRequest(
     @Size(min = PasswordPolicy.MIN_LENGTH, max = PasswordPolicy.MAX_LENGTH)
     String password
 ) {
+    public static LoginRequest from(UserCreateRequest request) {
+        return new LoginRequest(request.email(), request.password());
+    }
 }
