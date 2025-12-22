@@ -48,4 +48,8 @@ public class RefreshToken {
         LocalDateTime expiryDate) {
         return new RefreshToken(id, user, deviceType, userAgent, expiryDate);
     }
+
+    public String getId() {
+        return id;
+    }
 }
