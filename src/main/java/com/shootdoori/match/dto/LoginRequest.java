@@ -1,6 +1,6 @@
 package com.shootdoori.match.dto;
 
-import com.shootdoori.match.entity.user.dto.UserCreateRequest;
+import com.shootdoori.match.user.dto.UserCreateRequest;
 import com.shootdoori.match.policy.PasswordPolicy;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
