@@ -27,7 +27,7 @@ class UserTest {
         user.update(Position.AM, SkillLevel.PRO, Bio.of("변경된 자기소개"));
 
         // then
-        assertThat(user.getPosition()).isEqualTo(Position.GK);
+        assertThat(user.getPosition()).isEqualTo(Position.AM);
         assertThat(user.getSkillLevel()).isEqualTo(SkillLevel.PRO);
         assertThat(user.getBio().value()).isEqualTo("변경된 자기소개");
     }
