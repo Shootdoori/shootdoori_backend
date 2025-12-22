@@ -13,7 +13,7 @@ public class UniversityName {
     protected UniversityName() {
     }
 
-    public UniversityName(String universityName) {
+    private UniversityName(String universityName) {
         validate(universityName);
         this.universityName = universityName;
     }
