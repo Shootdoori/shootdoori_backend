@@ -1,5 +1,6 @@
 package com.shootdoori.match.user.service;
 
+import com.shootdoori.match.exception.common.DuplicatedException;
 import com.shootdoori.match.user.domain.User;
 import com.shootdoori.match.user.mapper.UserMapper;
 import com.shootdoori.match.user.repository.UserRepository;
@@ -35,5 +36,11 @@ public class UserQueryService {
     public User findByIdForEntity(Long id) {
         return userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ErrorCode.PROFILE_NOT_FOUND));
+    }
+
+    public void validateEmailNotDuplicated(String email) {
+        if (userRepository.existsByEmail(Email.of(email))) {
+            throw new DuplicatedException(ErrorCode.DUPLICATED_USER);
+        }
     }
 }

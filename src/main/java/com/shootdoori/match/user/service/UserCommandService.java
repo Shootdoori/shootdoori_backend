@@ -3,7 +3,6 @@ package com.shootdoori.match.user.service;
 import com.shootdoori.match.entity.common.Position;
 import com.shootdoori.match.entity.common.SkillLevel;
 import com.shootdoori.match.user.domain.User;
-import com.shootdoori.match.user.domain.UserValidator;
 import com.shootdoori.match.user.dto.ProfileResponse;
 import com.shootdoori.match.user.dto.ProfileUpdateRequest;
 import com.shootdoori.match.user.dto.UserCreateRequest;
@@ -26,21 +25,19 @@ public class UserCommandService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
-    private final UserValidator userValidator;
     private final UserQueryService userQueryService;
 
     public UserCommandService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-        UserMapper userMapper, UserValidator userValidator, UserQueryService userQueryService) {
+        UserMapper userMapper, UserQueryService userQueryService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
-        this.userValidator = userValidator;
         this.userQueryService = userQueryService;
     }
 
     public ProfileResponse create(UserCreateRequest createRequest) {
 
-        userValidator.validateEmailNotDuplicated(createRequest.email());
+        userQueryService.validateEmailNotDuplicated(createRequest.email());
         Password.validateRaw(createRequest.password());
 
         User user = new User(
