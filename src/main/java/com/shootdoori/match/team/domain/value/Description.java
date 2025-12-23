@@ -12,7 +12,7 @@ public class Description {
 
     protected Description() { }
 
-    public Description(String description) {
+    private Description(String description) {
         if (description != null && description.isBlank()) {
             description = null;
         }
