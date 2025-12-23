@@ -57,10 +57,6 @@ public class UserCommandService {
         return userMapper.toProfileResponse(saveUser);
     }
 
-    public ProfileResponse findById(Long userId) {
-        return userQueryService.findProfileById(userId);
-    }
-
     public ProfileResponse update(Long id, ProfileUpdateRequest updateRequest) {
         User user = userQueryService.findByIdForEntity(id);
 

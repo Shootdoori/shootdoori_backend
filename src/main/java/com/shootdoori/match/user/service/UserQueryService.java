@@ -22,7 +22,7 @@ public class UserQueryService {
         this.userMapper = userMapper;
     }
 
-    public ProfileResponse findProfileById(Long id) {
+    public ProfileResponse findById(Long id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ErrorCode.PROFILE_NOT_FOUND));
         return userMapper.toProfileResponse(user);
