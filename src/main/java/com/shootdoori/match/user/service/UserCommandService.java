@@ -18,8 +18,10 @@ import com.shootdoori.match.user.domain.value.UserName;
 import com.shootdoori.match.team.domain.value.UniversityName;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserCommandService {
 
     private final UserRepository userRepository;
@@ -61,8 +63,8 @@ public class UserCommandService {
         User user = userQueryService.findByIdForEntity(id);
 
         user.update(
-            Position.valueOf(updateRequest.position()),
-            SkillLevel.valueOf(updateRequest.skillLevel()),
+            Position.fromCode(updateRequest.position()),
+            SkillLevel.fromDisplayName(updateRequest.skillLevel()),
             Bio.of(updateRequest.bio())
         );
 
