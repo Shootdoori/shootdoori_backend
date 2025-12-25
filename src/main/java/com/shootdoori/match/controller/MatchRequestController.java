@@ -21,7 +21,7 @@ public class MatchRequestController {
         @LoginUser Long loginUserId,
         @RequestParam("selectDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectDate,
         @RequestParam("startTime") @DateTimeFormat(iso = DateTimeFormat.ISO.TIME) LocalTime startTime,
-        @PageableDefault(size = 10, sort = "preferredTimeStart", direction = Sort.Direction.ASC) Pageable pageable
+        @PageableDefault(sort = "preferredTimeStart", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return null;
     }
@@ -46,7 +46,7 @@ public class MatchRequestController {
     @GetMapping("/receive/me/pending")
     public ResponseEntity<Slice<MatchRequestResponseDto>> getReceivedPendingRequests(
         @LoginUser Long loginUserId,
-        @PageableDefault(size = 10, sort = "requestAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(sort = "requestAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return null;
     }
@@ -70,7 +70,7 @@ public class MatchRequestController {
     @GetMapping("/requests/me")
     public ResponseEntity<Slice<MatchRequestHistoryResponseDto>> getSentRequestsByMyTeam(
         @LoginUser Long loginUserId,
-        @PageableDefault(size = 10, sort = "requestAt", direction = org.springframework.data.domain.Sort.Direction.DESC)
+        @PageableDefault(sort = "requestAt", direction = org.springframework.data.domain.Sort.Direction.DESC)
         Pageable pageable) {
         return null;
     }
