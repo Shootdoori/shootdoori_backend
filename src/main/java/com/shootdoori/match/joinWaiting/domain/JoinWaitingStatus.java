@@ -1,5 +1,7 @@
 package com.shootdoori.match.joinWaiting.domain;
 
+import java.util.stream.Stream;
+
 public enum JoinWaitingStatus {
     PENDING("대기중"),
     APPROVED("승인됨"),
@@ -17,12 +19,12 @@ public enum JoinWaitingStatus {
     }
 
     public static JoinWaitingStatus fromDisplayName(String displayName) {
-        for (JoinWaitingStatus status : values()) {
-            if (status.displayName.equals(displayName)) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException("Unknown join queue status: " + displayName);
+        return Stream.of(values())
+            .filter(status -> status.displayName.equals(displayName))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException(
+                "Unknown join queue status: " + displayName
+            ));
     }
 
     public boolean isPending() {

@@ -15,7 +15,7 @@ public class VenueController {
 
     @GetMapping
     public Slice<VenueSearchResponseDto> getAllVenues(
-        @PageableDefault(size = 10, sort = "venueName", direction = Sort.Direction.ASC) Pageable pageable) {
+        @PageableDefault(sort = "venueName", direction = Sort.Direction.ASC) Pageable pageable) {
         return null;
     }
 }
