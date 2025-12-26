@@ -33,7 +33,7 @@ public class TeamMemberCommandService {
     public TeamMemberResponseDto create(Long teamId, TeamMemberRequestDto requestDto, Long userId) {
         Team team = teamQueryService.findByIdForEntity(teamId);
 
-        TeamMember teamMember = TeamMember.of(team, requestDto.userId(),
+        TeamMember teamMember = new TeamMember(team, requestDto.userId(),
             TeamMemberRole.VICE_LEADER.getDisplayName());
 
         return teamMemberMapper.toTeamMemberResponseDto(teamMemberRepository.save(teamMember));

@@ -33,7 +33,7 @@ public class TokenIssuer {
             jwtUtil.getAccessTokenValidityInMilliseconds(),
             jwtUtil.getRefreshTokenValidityInMilliseconds()
         );
-        RefreshToken refreshToken = RefreshToken.of(tokenId, user, deviceType, userAgent,
+        RefreshToken refreshToken = new RefreshToken(tokenId, user, deviceType, userAgent,
             expiryDate);
 
         return new GeneratedToken(authToken, refreshToken);

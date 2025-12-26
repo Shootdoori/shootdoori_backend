@@ -12,7 +12,14 @@ public class Password {
     protected Password() {}
 
     private Password(String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("인코딩된 패스워드는 비어 있을 수 없습니다.");
+        }
         this.value = value;
+    }
+
+    public static Password of(String encodedPassword) {
+        return new Password(encodedPassword);
     }
 
     public static void validateRaw(String raw) {
@@ -28,13 +35,6 @@ public class Password {
         if (!raw.matches(PasswordPolicy.REGEXP)) {
             throw new IllegalArgumentException(PasswordPolicy.MESSAGE);
         }
-    }
-
-    public static Password of(String encodedPassword) {
-        if (encodedPassword == null || encodedPassword.isBlank()) {
-            throw new IllegalArgumentException("인코딩된 패스워드는 비어 있을 수 없습니다.");
-        }
-        return new Password(encodedPassword);
     }
 
     public String value() {

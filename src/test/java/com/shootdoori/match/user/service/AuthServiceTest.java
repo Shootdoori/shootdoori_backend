@@ -113,7 +113,7 @@ class AuthServiceTest {
 
     private GeneratedToken createGeneratedToken(User user) {
         AuthToken authToken = new AuthToken("accessToken", "refreshToken", 3600L, 86400L);
-        RefreshToken refreshToken = RefreshToken.of("refreshTokenId", user, DeviceType.WEB,
+        RefreshToken refreshToken = new RefreshToken("refreshTokenId", user, DeviceType.WEB,
             "userAgent", LocalDateTime.now().plusDays(1));
         return new GeneratedToken(authToken, refreshToken);
     }

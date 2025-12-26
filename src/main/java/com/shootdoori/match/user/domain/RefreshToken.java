@@ -34,19 +34,13 @@ public class RefreshToken {
     protected RefreshToken() {
     }
 
-    private RefreshToken(String id, User user, DeviceType deviceType, String userAgent,
+    public RefreshToken(String id, User user, DeviceType deviceType, String userAgent,
         LocalDateTime expiryDate) {
         this.id = id;
         this.user = user;
         this.deviceType = deviceType;
         this.userAgent = userAgent;
         this.expiryDate = expiryDate;
-    }
-
-
-    public static RefreshToken of(String id, User user, DeviceType deviceType, String userAgent,
-        LocalDateTime expiryDate) {
-        return new RefreshToken(id, user, deviceType, userAgent, expiryDate);
     }
 
     public String getId() {
