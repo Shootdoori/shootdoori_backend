@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 class RefreshTokenTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트")
-    void of() {
+    @DisplayName("생성자 테스트")
+    void create() {
         // given
         String id = "refreshTokenId";
         User user = mock(User.class);
@@ -20,7 +20,7 @@ class RefreshTokenTest {
         LocalDateTime expiryDate = LocalDateTime.now().plusDays(7L);
 
         // when
-        RefreshToken refreshToken = RefreshToken.of(id, user, deviceType, userAgent, expiryDate);
+        RefreshToken refreshToken = new RefreshToken(id, user, deviceType, userAgent, expiryDate);
 
         // then
         assertThat(refreshToken).isNotNull();

@@ -52,12 +52,12 @@ class TeamMemberCommandServiceTest {
         teamMemberCommandService = new TeamMemberCommandService(teamQueryService,
             teamMemberQueryService, teamMemberRepository, teamMemberMapper);
 
-        team = Team.of("감자빵 FC", "강원대학교", TeamType.CENTRAL_CLUB, "주 2회 축구합니다.");
+        team = new Team("감자빵 FC", "강원대학교", TeamType.CENTRAL_CLUB, "주 2회 축구합니다.");
 
-        leaderMember = TeamMember.of(team, leaderUserId, TeamMemberRole.LEADER.getDisplayName());
-        viceLeaderMember = TeamMember.of(team, viceLeaderUserId,
+        leaderMember = new TeamMember(team, leaderUserId, TeamMemberRole.LEADER.getDisplayName());
+        viceLeaderMember = new TeamMember(team, viceLeaderUserId,
             TeamMemberRole.VICE_LEADER.getDisplayName());
-        basicMember = TeamMember.of(team, basicUserId, TeamMemberRole.MEMBER.getDisplayName());
+        basicMember = new TeamMember(team, basicUserId, TeamMemberRole.MEMBER.getDisplayName());
     }
 
     @Test

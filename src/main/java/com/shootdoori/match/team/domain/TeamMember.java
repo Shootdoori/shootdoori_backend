@@ -47,14 +47,10 @@ public class TeamMember {
     protected TeamMember() {
     }
 
-    private TeamMember(Team team, Long userId, String role) {
+    public TeamMember(Team team, Long userId, String role) {
         this.team = team;
         this.userId = userId;
         this.role = TeamMemberRole.fromDisplayName(role);
-    }
-
-    public static TeamMember of(Team team, Long userId, String role) {
-        return new TeamMember(team, userId, role);
     }
 
     public Long getId() {

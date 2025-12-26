@@ -1,5 +1,7 @@
 package com.shootdoori.match.team.domain;
 
+import java.util.stream.Stream;
+
 public enum TeamType {
     CENTRAL_CLUB("중앙동아리"),
     DEPARTMENT_CLUB("과동아리"),
@@ -16,12 +18,10 @@ public enum TeamType {
     }
 
     public static TeamType fromDisplayName(String displayName) {
-        for (TeamType type : values()) {
-            if (type.displayName.equals(displayName)) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("Unknown team type: " + displayName);
+        return Stream.of(values())
+            .filter(type -> type.displayName.equals(displayName))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unknown team type: " + displayName));
     }
 }
 

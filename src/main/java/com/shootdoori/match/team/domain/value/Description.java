@@ -25,10 +25,6 @@ public class Description {
         return new Description(description);
     }
 
-    public static Description empty() {
-        return new Description(null);
-    }
-
     private void validate(String description) {
         if (description != null && description.length() > MAX_DESCRIPTION_LENGTH) {
             throw new IllegalArgumentException("설명은 최대 1000자입니다.");

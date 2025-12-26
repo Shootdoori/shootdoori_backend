@@ -2,6 +2,7 @@ package com.shootdoori.match.team.domain;
 
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NoPermissionException;
+import java.util.stream.Stream;
 
 public enum TeamMemberRole {
     LEADER("회장"),
@@ -20,12 +21,10 @@ public enum TeamMemberRole {
     }
 
     public static TeamMemberRole fromDisplayName(String displayName) {
-        for (TeamMemberRole role : values()) {
-            if (role.displayName.equals(displayName)) {
-                return role;
-            }
-        }
-        throw new IllegalArgumentException("Unknown role: " + displayName);
+        return Stream.of(values())
+            .filter(role -> role.displayName.equals(displayName))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unknown role: " + displayName));
     }
 
     public boolean canKick(TeamMemberRole targetRole) {

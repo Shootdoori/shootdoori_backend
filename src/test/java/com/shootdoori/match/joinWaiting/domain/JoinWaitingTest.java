@@ -15,7 +15,7 @@ class JoinWaitingTest {
 
     @BeforeEach
     void setUp() {
-        joinWaiting = JoinWaiting.of(1L, 1L, "열심히 하겠습니다!", JoinWaitingType.MEMBER);
+        joinWaiting = new JoinWaiting(1L, 1L, "열심히 하겠습니다!", JoinWaitingType.MEMBER);
     }
 
     @Test
