@@ -11,13 +11,13 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 class UserNameTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트")
-    void of() {
+    @DisplayName("생성자 테스트")
+    void constructor() {
         // given
         String name = "정상수";
 
         // when
-        UserName userName = UserName.of(name);
+        UserName userName = new UserName(name);
 
         // then
         assertThat(userName).isNotNull();
@@ -27,32 +27,32 @@ class UserNameTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("이름 null 또는 빈 문자열 테스트")
-    void of_Fail_By_Blank_or_Null(String name) {
-        assertThatThrownBy(() -> UserName.of(name))
+    void constructor_Fail_By_Blank_or_Null(String name) {
+        assertThatThrownBy(() -> new UserName(name))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("이름은 필수 입력 값입니다.");
     }
 
     @Test
     @DisplayName("이름 2자 미만")
-    void of_Fail_By_Length_Under() {
+    void constructor_Fail_By_Length_Under() {
         // given
         String name = "김";
 
         // when
-        assertThatThrownBy(() -> UserName.of(name))
+        assertThatThrownBy(() -> new UserName(name))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("이름은 2자 이상 100자 이하로 입력해주세요.");
     }
 
     @Test
     @DisplayName("이름 100자 초과")
-    void of_Fail_By_Length_Over() {
+    void constructor_Fail_By_Length_Over() {
         // given
         String name = "정".repeat(101);
 
         // when
-        assertThatThrownBy(() -> UserName.of(name))
+        assertThatThrownBy(() -> new UserName(name))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("이름은 2자 이상 100자 이하로 입력해주세요.");
     }

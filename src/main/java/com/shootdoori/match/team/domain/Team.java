@@ -51,10 +51,10 @@ public class Team {
     }
 
     public Team(String teamName, String university, TeamType teamType, String description) {
-        this.teamName = TeamName.of(teamName);
-        this.universityName = UniversityName.of(university);
+        this.teamName = new TeamName(teamName);
+        this.universityName = new UniversityName(university);
         this.teamType = teamType;
-        this.description = Description.of(description);
+        this.description = new Description(description);
     }
 
     public Long getId() {
@@ -83,9 +83,9 @@ public class Team {
 
     public void changeTeamInfo(String name, String teamType, String university,
         String description) {
-        this.teamName = TeamName.of(name);
+        this.teamName = new TeamName(name);
         this.teamType = TeamType.fromDisplayName(teamType);
-        this.universityName = UniversityName.of(university);
-        this.description = Description.of(description);
+        this.universityName = new UniversityName(university);
+        this.description = new Description(description);
     }
 }

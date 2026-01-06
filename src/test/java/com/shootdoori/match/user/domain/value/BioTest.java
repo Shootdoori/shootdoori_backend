@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 class BioTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트 - 정상")
-    void of() {
+    @DisplayName("생성자 테스트 - 정상")
+    void constructor() {
         // given
         String bioStr = "안녕하세요. 정상수입니다.";
 
         // when
-        Bio bio = Bio.of(bioStr);
+        Bio bio = new Bio(bioStr);
 
         // then
         assertThat(bio).isNotNull();
@@ -23,13 +23,13 @@ class BioTest {
     }
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트 - null 입력 가능")
-    void of_Null() {
+    @DisplayName("생성자 테스트 - null 입력 가능")
+    void constructor_Null() {
         // given
         String bioStr = null;
 
         // when
-        Bio bio = Bio.of(bioStr);
+        Bio bio = new Bio(bioStr);
 
         // then
         assertThat(bio).isNotNull();
@@ -38,12 +38,12 @@ class BioTest {
 
     @Test
     @DisplayName("자기소개 500자 초과")
-    void of_Fail_By_Length_Over() {
+    void constructor_Fail_By_Length_Over() {
         // given
         String bioStr = "a".repeat(501);
 
         // when
-        assertThatThrownBy(() -> Bio.of(bioStr))
+        assertThatThrownBy(() -> new Bio(bioStr))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("자기소개는 500자를 초과할 수 없습니다.");
     }

@@ -11,13 +11,9 @@ public class UserName {
 
     protected UserName() {}
 
-    private UserName(String value) {
+    public UserName(String value) {
         validate(value);
         this.value = value;
-    }
-
-    public static UserName of(String value) {
-        return new UserName(value);
     }
 
     private void validate(String name) {

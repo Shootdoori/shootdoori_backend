@@ -24,7 +24,7 @@ class UserTest {
         User user = createUser();
 
         // when
-        user.update(Position.AM, SkillLevel.PRO, Bio.of("변경된 자기소개"));
+        user.update(Position.AM, SkillLevel.PRO, new Bio("변경된 자기소개"));
 
         // then
         assertThat(user.getPosition()).isEqualTo(Position.AM);
@@ -37,7 +37,7 @@ class UserTest {
     void setPassword() {
         // given
         User user = createUser();
-        Password newPassword = Password.of("NewPassword123!");
+        Password newPassword = new Password("NewPassword123!");
 
         // when
         user.setPassword(newPassword);
@@ -48,16 +48,16 @@ class UserTest {
 
     private User createUser() {
         return new User(
-            UserName.of("정상수"),
-            Email.of("gamza@kangwon.ac.kr"),
-            Password.of("Password123!"),
+            new UserName("정상수"),
+            new Email("gamza@kangwon.ac.kr"),
+            new Password("Password123!"),
             Position.FW,
             SkillLevel.AMATEUR,
-            KakaoTalkId.of("kakao123"),
-            UniversityName.of("강원대학교"),
-            Department.of("컴퓨터공학과"),
-            StudentYear.of("23"),
-            Bio.of("안녕하세요")
+            new KakaoTalkId("kakao123"),
+            new UniversityName("강원대학교"),
+            new Department("컴퓨터공학과"),
+            new StudentYear("23"),
+            new Bio("안녕하세요")
         );
     }
 }

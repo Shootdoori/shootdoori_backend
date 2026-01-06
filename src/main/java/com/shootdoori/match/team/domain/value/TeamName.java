@@ -10,17 +10,13 @@ public class TeamName {
 
     private String teamName;
 
-    private TeamName(String teamName) {
+    public TeamName(String teamName) {
         if (teamName == null || teamName.isBlank()) {
             throw new TeamNameException(ErrorCode.INVALID_TEAM_NAME);
         }
 
         validate(teamName);
         this.teamName = teamName;
-    }
-
-    public static TeamName of(String name) {
-        return new TeamName(name);
     }
 
     private void validate(String teamName) {

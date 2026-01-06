@@ -12,17 +12,13 @@ public class Description {
 
     protected Description() { }
 
-    private Description(String description) {
+    public Description(String description) {
         if (description != null && description.isBlank()) {
             description = null;
         }
 
         validate(description);
         this.description = description;
-    }
-
-    public static Description of(String description) {
-        return new Description(description);
     }
 
     private void validate(String description) {

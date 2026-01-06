@@ -11,13 +11,9 @@ public class Bio {
 
     protected Bio() {}
 
-    private Bio(String value) {
+    public Bio(String value) {
         validate(value);
         this.value = value;
-    }
-
-    public static Bio of(String value) {
-        return new Bio(value);
     }
 
     private void validate(String bio) {
