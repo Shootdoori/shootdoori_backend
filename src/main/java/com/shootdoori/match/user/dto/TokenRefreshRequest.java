@@ -1,4 +1,4 @@
-package com.shootdoori.match.dto;
+package com.shootdoori.match.user.dto;
 
 public record TokenRefreshRequest(String refreshToken) {
 }

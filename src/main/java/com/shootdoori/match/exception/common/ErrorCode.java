@@ -77,6 +77,7 @@ public enum ErrorCode {
     FAIL_REGISTER("회원가입에 실패하였습니다.", HttpStatus.BAD_REQUEST),
     FAIL_LOGIN("잘못된 이메일 또는 비밀번호입니다.", HttpStatus.BAD_REQUEST),
     INVALID_AUTH_INFO("인증 정보가 올바르지 않습니다.", HttpStatus.UNAUTHORIZED),
+    STOLEN_TOKEN_DETECTED("토큰 탈취가 감지되었습니다.", HttpStatus.UNAUTHORIZED),
 
     // Review
     MATCH_NOT_FINISHED_YET("아직 경기가 종료되지 않아 리뷰를 작성할 수 없습니다.", HttpStatus.BAD_REQUEST),

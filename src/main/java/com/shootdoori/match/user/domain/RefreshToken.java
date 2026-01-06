@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 
 @Entity
@@ -29,7 +30,13 @@ public class RefreshToken {
     String userAgent;
 
     @Column
+    boolean revoked = false;
+
+    @Column
     LocalDateTime expiryDate;
+
+    @Version
+    private Long version;
 
     protected RefreshToken() {
     }
@@ -45,5 +52,37 @@ public class RefreshToken {
 
     public String getId() {
         return id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public boolean isExpired() {
+        return LocalDateTime.now().isAfter(expiryDate);
+    }
+
+    public boolean isRevoked() {
+        return revoked;
+    }
+
+    public void revoke() {
+        revoked = true;
     }
 }
