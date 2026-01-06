@@ -39,7 +39,7 @@ public class TeamQueryService {
     public Page<TeamDetailResponseDto> findAllByUniversity(int page, int size, String university) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("teamName").ascending());
 
-        Page<Team> teamPage = teamRepository.findAllByUniversityName(UniversityName.of(university),
+        Page<Team> teamPage = teamRepository.findAllByUniversityName(new UniversityName(university),
             pageable);
 
         return teamPage.map(teamMapper::toTeamDetailResponse);

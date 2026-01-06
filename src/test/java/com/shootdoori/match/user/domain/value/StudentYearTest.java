@@ -12,13 +12,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 class StudentYearTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트")
-    void of() {
+    @DisplayName("생성자 테스트")
+    void constructor() {
         // given
         String year = "23";
 
         // when
-        StudentYear studentYear = StudentYear.of(year);
+        StudentYear studentYear = new StudentYear(year);
 
         // then
         assertThat(studentYear).isNotNull();
@@ -28,8 +28,8 @@ class StudentYearTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("입학년도 null 또는 빈 문자열 테스트")
-    void of_Fail_By_Blank_or_Null(String year) {
-        assertThatThrownBy(() -> StudentYear.of(year))
+    void constructor_Fail_By_Blank_or_Null(String year) {
+        assertThatThrownBy(() -> new StudentYear(year))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("입학년도는 필수 입력 값입니다.");
     }
@@ -37,8 +37,8 @@ class StudentYearTest {
     @ParameterizedTest
     @ValueSource(strings = {"2023", "1", "ab", "2a"})
     @DisplayName("입학년도 형식 불일치 (2자리 숫자)")
-    void of_Fail_By_Invalid_Format(String year) {
-        assertThatThrownBy(() -> StudentYear.of(year))
+    void constructor_Fail_By_Invalid_Format(String year) {
+        assertThatThrownBy(() -> new StudentYear(year))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("입학년도는 2자리 숫자로 입력해주세요. (예: 25)");
     }

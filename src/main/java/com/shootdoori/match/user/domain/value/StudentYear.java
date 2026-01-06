@@ -10,13 +10,9 @@ public class StudentYear {
 
     protected StudentYear() {}
 
-    private StudentYear(String value) {
+    public StudentYear(String value) {
         validate(value);
         this.value = value;
-    }
-
-    public static StudentYear of(String value) {
-        return new StudentYear(value);
     }
 
     private void validate(String year) {

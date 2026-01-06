@@ -10,13 +10,9 @@ public class Email {
 
     protected Email() {}
 
-    private Email(String value) {
+    public Email(String value) {
         validate(value);
         this.value = value;
-    }
-
-    public static Email of(String value) {
-        return new Email(value);
     }
 
     private void validate(String email) {

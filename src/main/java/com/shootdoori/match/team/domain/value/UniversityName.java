@@ -13,13 +13,9 @@ public class UniversityName {
     protected UniversityName() {
     }
 
-    private UniversityName(String universityName) {
+    public UniversityName(String universityName) {
         validate(universityName);
         this.universityName = universityName;
-    }
-
-    public static UniversityName of(String name) {
-        return new UniversityName(name);
     }
 
     private void validate(String universityName) {

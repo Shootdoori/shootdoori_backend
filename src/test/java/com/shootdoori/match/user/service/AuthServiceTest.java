@@ -98,16 +98,16 @@ class AuthServiceTest {
 
     private User createUser() {
         return new User(
-            UserName.of("정상수"),
-            Email.of("gamza@kangwon.ac.kr"),
-            Password.of("encodedPassword"),
+            new UserName("정상수"),
+            new Email("gamza@kangwon.ac.kr"),
+            new Password("encodedPassword"),
             Position.FW,
             SkillLevel.AMATEUR,
-            KakaoTalkId.of("kakao123"),
-            UniversityName.of("강원대학교"),
-            Department.of("컴퓨터공학과"),
-            StudentYear.of("23"),
-            Bio.of("안녕하세요")
+            new KakaoTalkId("kakao123"),
+            new UniversityName("강원대학교"),
+            new Department("컴퓨터공학과"),
+            new StudentYear("23"),
+            new Bio("안녕하세요")
         );
     }
 

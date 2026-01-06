@@ -34,7 +34,7 @@ class JwtUtilTest {
         // given
         User user = mock(User.class);
         given(user.getId()).willReturn(1L);
-        given(user.getEmail()).willReturn(Email.of("gamza@kangwon.ac.kr"));
+        given(user.getEmail()).willReturn(new Email("gamza@kangwon.ac.kr"));
 
         // when
         String token = jwtUtil.generateAccessToken(user);
@@ -96,7 +96,7 @@ class JwtUtilTest {
         // given
         User user = mock(User.class);
         given(user.getId()).willReturn(1L);
-        given(user.getEmail()).willReturn(Email.of("gamza@kangwon.ac.kr"));
+        given(user.getEmail()).willReturn(new Email("gamza@kangwon.ac.kr"));
 
         String validToken = jwtUtil.generateAccessToken(user);
 

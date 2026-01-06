@@ -11,12 +11,12 @@ class DescriptionTest {
 
     @Test
     @DisplayName("정상적인 설명 생성 테스트 (1000자 이하)")
-    void of_Success() {
+    void constructor_Success() {
         // given
         String validDescription = "이것은 정상적인 설명입니다.";
         
         // when
-        Description description = Description.of(validDescription);
+        Description description = new Description(validDescription);
         
         // then
         assertThat(description.getDescription()).isEqualTo(validDescription);
@@ -24,23 +24,23 @@ class DescriptionTest {
     
     @Test
     @DisplayName("설명이 1000자를 초과하면 예외 발생")
-    void of_Fail_MaxLengthExceeded() {
+    void constructor_Fail_MaxLengthExceeded() {
         // given
         String longDescription = "a".repeat(1001);
         
         // when & then
-        assertThatThrownBy(() -> Description.of(longDescription))
+        assertThatThrownBy(() -> new Description(longDescription))
             .isInstanceOf(IllegalArgumentException.class);
     }
     
     @Test
     @DisplayName("설명이 null이면 null로 저장된다")
-    void of_Null() {
+    void constructor_Null() {
         // given
         String nullDescription = null;
         
         // when
-        Description description = Description.of(nullDescription);
+        Description description = new Description(nullDescription);
         
         // then
         assertThat(description.getDescription()).isEqualTo(null);
@@ -48,12 +48,12 @@ class DescriptionTest {
 
     @Test
     @DisplayName("설명이 빈 문자열이거나 공백이면 null로 저장된다")
-    void of_Blank_To_Null() {
+    void constructor_Blank_To_Null() {
         // given
         String blankDescription = "   ";
 
         // when
-        Description description = Description.of(blankDescription);
+        Description description = new Description(blankDescription);
 
         // then
         assertThat(description.getDescription()).isEqualTo(null);

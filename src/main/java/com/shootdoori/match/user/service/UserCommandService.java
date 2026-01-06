@@ -43,16 +43,16 @@ public class UserCommandService {
         Password.validateRaw(createRequest.password());
 
         User user = new User(
-            UserName.of(createRequest.name()),
-            Email.of(createRequest.email()),
-            Password.of(passwordEncoder.encode(createRequest.password())),
+            new UserName(createRequest.name()),
+            new Email(createRequest.email()),
+            new Password(passwordEncoder.encode(createRequest.password())),
             Position.fromCode(createRequest.position()),
             SkillLevel.fromDisplayName(createRequest.skillLevel()),
-            KakaoTalkId.of(createRequest.kakaoTalkId()),
-            UniversityName.of(createRequest.university()),
-            Department.of(createRequest.department()),
-            StudentYear.of(createRequest.studentYear()),
-            Bio.of(createRequest.bio())
+            new KakaoTalkId(createRequest.kakaoTalkId()),
+            new UniversityName(createRequest.university()),
+            new Department(createRequest.department()),
+            new StudentYear(createRequest.studentYear()),
+            new Bio(createRequest.bio())
         );
 
         User saveUser = userRepository.save(user);
@@ -65,7 +65,7 @@ public class UserCommandService {
         user.update(
             Position.fromCode(updateRequest.position()),
             SkillLevel.fromDisplayName(updateRequest.skillLevel()),
-            Bio.of(updateRequest.bio())
+            new Bio(updateRequest.bio())
         );
 
         return userMapper.toProfileResponse(user);
