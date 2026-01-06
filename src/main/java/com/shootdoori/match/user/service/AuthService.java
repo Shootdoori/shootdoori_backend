@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AuthService {
 
     private final UserQueryService userQueryService;
@@ -29,7 +30,6 @@ public class AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    @Transactional
     public AuthTokenResponse login(LoginRequest request, String userAgent) {
         User user = userQueryService.findByEmail(request.email());
         validatePasswordMatch(request, user);
@@ -39,7 +39,7 @@ public class AuthService {
 
         saveRefreshToken(generatedToken);
 
-        return createAuthTokenResponse(generatedToken);
+        return AuthTokenResponse.from(generatedToken);
     }
 
     private void saveRefreshToken(GeneratedToken generatedToken) {
@@ -50,14 +50,5 @@ public class AuthService {
         if (!passwordEncoder.matches(request.password(), user.getPassword())) {
             throw new UnauthorizedException(ErrorCode.FAIL_LOGIN);
         }
-    }
-
-    private AuthTokenResponse createAuthTokenResponse(GeneratedToken generatedToken) {
-        return new AuthTokenResponse(
-            generatedToken.authToken().accessToken(),
-            generatedToken.authToken().refreshToken(),
-            generatedToken.authToken().accessTokenExpiresIn(),
-            generatedToken.authToken().refreshTokenExpiresIn()
-        );
     }
 }
