@@ -1,6 +1,7 @@
 package com.shootdoori.match.entity.common;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum SkillLevel {
 
@@ -19,13 +20,10 @@ public enum SkillLevel {
             throw new IllegalArgumentException("스킬 레벨 이름은 비어 있을 수 없습니다.");
         }
 
-        for (SkillLevel level : values()) {
-            if (level.displayName.equals(displayName)) {
-                return level;
-            }
-        }
-
-        throw new IllegalArgumentException("잘못된 스킬 레벨 이름입니다: " + displayName);
+        return Stream.of(values())
+            .filter(level -> level.displayName.equals(displayName))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("잘못된 스킬 레벨 이름입니다: " + displayName));
     }
 
     public static SkillLevel fromCode(String code) {

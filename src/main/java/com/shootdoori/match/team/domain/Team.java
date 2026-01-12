@@ -50,16 +50,11 @@ public class Team {
     protected Team() {
     }
 
-    private Team(String teamName, String university, TeamType teamType, String description) {
+    public Team(String teamName, String university, TeamType teamType, String description) {
         this.teamName = TeamName.of(teamName);
         this.universityName = UniversityName.of(university);
         this.teamType = teamType;
         this.description = Description.of(description);
-    }
-
-    public static Team of(String teamName, String university, TeamType teamType,
-        String description) {
-        return new Team(teamName, university, teamType, description);
     }
 
     public Long getId() {

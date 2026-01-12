@@ -86,7 +86,7 @@ public class JoinWaitingController {
         @PathVariable Long teamId,
         @RequestParam(defaultValue = "PENDING") JoinWaitingStatus status,
         @RequestParam(defaultValue = "MEMBER") JoinWaitingType type,
-        @PageableDefault(size = 10, sort = "timeStamp.createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(sort = "timeStamp.createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return new ResponseEntity<>(
             joinWaitingQueryService.findPending(teamId, status, type, pageable), HttpStatus.OK);
@@ -96,7 +96,7 @@ public class JoinWaitingController {
     public ResponseEntity<Page<JoinWaitingResponseDto>> findByApplicant(
         @LoginUser Long loginUserId,
         @RequestParam(defaultValue = "MEMBER") JoinWaitingType type,
-        @PageableDefault(size = 10, sort = "timeStamp.createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(sort = "timeStamp.createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return new ResponseEntity<>(
             joinWaitingQueryService.findAllByApplicantIdAndJoinWaitingType(loginUserId, type,

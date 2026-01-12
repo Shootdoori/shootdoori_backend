@@ -60,17 +60,12 @@ public class JoinWaiting {
     protected JoinWaiting() {
     }
 
-    private JoinWaiting(Long teamId, Long applicantId, String message,
+    public JoinWaiting(Long teamId, Long applicantId, String message,
         JoinWaitingType joinWaitingType) {
         this.teamId = teamId;
         this.applicantId = applicantId;
         this.message = message;
         this.joinWaitingType = joinWaitingType;
-    }
-
-    public static JoinWaiting of(Long teamId, Long applicantId, String message,
-        JoinWaitingType joinWaitingType) {
-        return new JoinWaiting(teamId, applicantId, message, joinWaitingType);
     }
 
     public Long getId() {

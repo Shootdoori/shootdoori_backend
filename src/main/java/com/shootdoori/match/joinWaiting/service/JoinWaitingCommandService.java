@@ -38,7 +38,7 @@ public class JoinWaitingCommandService {
         JoinWaitingRequestDto requestDto) {
 
         teamQueryService.findByIdForEntity(teamId);
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, loginUserId, requestDto.message(),
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, loginUserId, requestDto.message(),
             requestDto.type());
 
         return joinWaitingMapper.toResponseDto(joinWaitingRepository.save(joinWaiting));

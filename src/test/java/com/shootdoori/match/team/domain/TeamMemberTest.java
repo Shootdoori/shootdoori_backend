@@ -23,10 +23,10 @@ class TeamMemberTest {
 
     @BeforeEach
     void setUp() {
-        team = Team.of("강원대 FC", "강원대학교", TeamType.CENTRAL_CLUB, "설");
-        loginMember = TeamMember.of(team, loginUserId, TeamMemberRole.LEADER.getDisplayName());
-        targetMember = TeamMember.of(team, targetUserId, TeamMemberRole.MEMBER.getDisplayName());
-        basicMember = TeamMember.of(team, basicUserId,
+        team = new Team("강원대 FC", "강원대학교", TeamType.CENTRAL_CLUB, "설");
+        loginMember = new TeamMember(team, loginUserId, TeamMemberRole.LEADER.getDisplayName());
+        targetMember = new TeamMember(team, targetUserId, TeamMemberRole.MEMBER.getDisplayName());
+        basicMember = new TeamMember(team, basicUserId,
             TeamMemberRole.MEMBER.getDisplayName());
     }
 

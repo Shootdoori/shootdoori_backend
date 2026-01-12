@@ -1,14 +1,19 @@
 package com.shootdoori.match.team.domain.value;
 
+import jakarta.persistence.Embeddable;
 import java.util.Objects;
 
+@Embeddable
 public class UniversityName {
 
     private static final int MAX_UNIVERSITY_NAME = 100;
 
     private String universityName;
 
-    public UniversityName(String universityName) {
+    protected UniversityName() {
+    }
+
+    private UniversityName(String universityName) {
         validate(universityName);
         this.universityName = universityName;
     }

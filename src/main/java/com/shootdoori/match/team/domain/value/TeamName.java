@@ -10,7 +10,7 @@ public class TeamName {
 
     private String teamName;
 
-    public TeamName(String teamName) {
+    private TeamName(String teamName) {
         if (teamName == null || teamName.isBlank()) {
             throw new TeamNameException(ErrorCode.INVALID_TEAM_NAME);
         }

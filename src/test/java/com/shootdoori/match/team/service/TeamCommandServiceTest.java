@@ -45,7 +45,7 @@ class TeamCommandServiceTest {
         Long userId = 1L;
         TeamRequestDto requestDto = new TeamRequestDto("수정된이름", "수정된설명", "수정된대학", "과동아리");
 
-        Team team = Team.of("원래이름", "원래대학", TeamType.CENTRAL_CLUB, "원래설명");
+        Team team = new Team("원래이름", "원래대학", TeamType.CENTRAL_CLUB, "원래설명");
         TeamDetailResponseDto expectedResponse = new TeamDetailResponseDto(teamId, "수정된이름", "수정된설명", "수정된대학", "과동아리", "20251121");
 
         given(teamQueryService.findByIdForEntity(teamId)).willReturn(team);

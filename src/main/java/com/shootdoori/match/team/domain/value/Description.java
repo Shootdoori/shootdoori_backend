@@ -12,7 +12,7 @@ public class Description {
 
     protected Description() { }
 
-    public Description(String description) {
+    private Description(String description) {
         if (description != null && description.isBlank()) {
             description = null;
         }
@@ -23,10 +23,6 @@ public class Description {
 
     public static Description of(String description) {
         return new Description(description);
-    }
-
-    public static Description empty() {
-        return new Description(null);
     }
 
     private void validate(String description) {

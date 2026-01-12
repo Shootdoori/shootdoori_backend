@@ -12,7 +12,7 @@ class TeamTest {
 
     @BeforeEach
     void setUp() {
-        team = Team.of("감자빵 FC", "강원대학교", TeamType.CENTRAL_CLUB, "주 2회 축구합니다.");
+        team = new Team("감자빵 FC", "강원대학교", TeamType.CENTRAL_CLUB, "주 2회 축구합니다.");
     }
 
     @Test

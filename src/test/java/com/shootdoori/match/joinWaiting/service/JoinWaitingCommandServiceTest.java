@@ -62,7 +62,7 @@ class JoinWaitingCommandServiceTest {
     void approve() {
         // given
         JoinWaitingApproveRequestDto requestDto = new JoinWaitingApproveRequestDto("일반멤버", "맘에 듭니다.");
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
 
         given(joinWaitingQueryService.findByIdForEntity(joinWaitingId)).willReturn(joinWaiting);
 
@@ -79,7 +79,7 @@ class JoinWaitingCommandServiceTest {
     void reject() {
         // given
         JoinWaitingRejectRequestDto requestDto = new JoinWaitingRejectRequestDto("죄송합니다.");
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
 
         given(joinWaitingQueryService.findByIdForEntity(joinWaitingId)).willReturn(joinWaiting);
 
@@ -96,7 +96,7 @@ class JoinWaitingCommandServiceTest {
     void cancel() {
         // given
         JoinWaitingCancelRequestDto requestDto = new JoinWaitingCancelRequestDto("개인 사정으로 취소합니다.");
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
 
         given(joinWaitingQueryService.findByIdForEntity(joinWaitingId)).willReturn(joinWaiting);
 
@@ -113,7 +113,7 @@ class JoinWaitingCommandServiceTest {
         // given
         Long unauthorizedUserId = 999L;
         JoinWaitingApproveRequestDto requestDto = new JoinWaitingApproveRequestDto("일반멤버", "맘에 듭니다.");
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
 
         given(joinWaitingQueryService.findByIdForEntity(joinWaitingId)).willReturn(joinWaiting);
         doThrow(new NoPermissionException()).when(teamMemberQueryService)
@@ -131,7 +131,7 @@ class JoinWaitingCommandServiceTest {
         // given
         Long unauthorizedUserId = 999L;
         JoinWaitingRejectRequestDto requestDto = new JoinWaitingRejectRequestDto("맘에 듭니다.");
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
 
         given(joinWaitingQueryService.findByIdForEntity(joinWaitingId)).willReturn(joinWaiting);
         doThrow(new NoPermissionException())
@@ -149,7 +149,7 @@ class JoinWaitingCommandServiceTest {
         // given
         Long otherUserId = 999L;
         JoinWaitingCancelRequestDto requestDto = new JoinWaitingCancelRequestDto("개인 사정으로 취소합니다.");
-        JoinWaiting joinWaiting = JoinWaiting.of(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
+        JoinWaiting joinWaiting = new JoinWaiting(teamId, applicantId, "가입신청", JoinWaitingType.MEMBER);
 
         given(joinWaitingQueryService.findByIdForEntity(joinWaitingId)).willReturn(joinWaiting);
 

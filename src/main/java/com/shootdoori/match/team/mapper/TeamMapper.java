@@ -14,7 +14,7 @@ public class TeamMapper {
     }
 
     public Team toEntity(TeamRequestDto requestDto, Long captainId) {
-        return Team.of(
+        return new Team(
             requestDto.name(),
             requestDto.university(),
             parseToTeamType(requestDto.teamType()),
