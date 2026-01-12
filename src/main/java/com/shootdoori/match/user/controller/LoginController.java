@@ -66,15 +66,16 @@ public class LoginController {
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody TokenRefreshRequest token) {
-
-        return null;
+        authService.logout(token.refreshToken());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/logout-all")
     public ResponseEntity<Void> logoutAll(
         @LoginUser Long userId
     ) {
-        return null;
+        authService.logoutAll(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/login-cookie")

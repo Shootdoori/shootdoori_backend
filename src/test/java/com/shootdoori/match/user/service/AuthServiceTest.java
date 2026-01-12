@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import com.shootdoori.match.dto.LoginRequest;
@@ -26,7 +27,9 @@ import com.shootdoori.match.user.dto.AuthToken;
 import com.shootdoori.match.user.dto.AuthTokenResponse;
 import com.shootdoori.match.user.repository.RefreshTokenRepository;
 import com.shootdoori.match.user.util.GeneratedToken;
+import com.shootdoori.match.user.util.JwtUtil;
 import com.shootdoori.match.user.util.TokenIssuer;
+import io.jsonwebtoken.Claims;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,13 +51,15 @@ class AuthServiceTest {
     private TokenIssuer tokenIssuer;
     @Mock
     private RefreshTokenRepository refreshTokenRepository;
+    @Mock
+    private JwtUtil jwtUtil;
 
     private AuthService authService;
 
     @BeforeEach
     void setUp() {
         authService = new AuthService(userQueryService, passwordEncoder, tokenIssuer,
-            refreshTokenRepository);
+            refreshTokenRepository, jwtUtil);
     }
 
     @Test
@@ -94,6 +99,40 @@ class AuthServiceTest {
         // when & then
         assertThatThrownBy(() -> authService.login(request, userAgent))
             .isInstanceOf(UnauthorizedException.class);
+    }
+
+    @Test
+    @DisplayName("로그아웃 성공")
+    void logout_success() {
+        // given
+        String refreshToken = "refreshToken";
+        String tokenId = "tokenId";
+        Claims claims = mock(Claims.class);
+
+        given(jwtUtil.getClaims(refreshToken)).willReturn(claims);
+        given(claims.getId()).willReturn(tokenId);
+
+        // when
+        authService.logout(refreshToken);
+
+        // when
+        verify(refreshTokenRepository).deleteById(tokenId);
+    }
+
+    @Test
+    @DisplayName("전체 기기 로그아웃 성공")
+    void logoutAll_success() {
+        // given
+        Long userId = 1L;
+        User user = createUser();
+
+        given(userQueryService.findByIdForEntity(userId)).willReturn(user);
+
+        // when
+        authService.logoutAll(userId);
+
+        // then
+        verify(refreshTokenRepository).deleteByUser(user);
     }
 
     private User createUser() {
