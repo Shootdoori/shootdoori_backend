@@ -10,6 +10,8 @@ public class TeamName {
 
     private String teamName;
 
+    protected TeamName() {}
+
     public TeamName(String teamName) {
         if (teamName == null || teamName.isBlank()) {
             throw new TeamNameException(ErrorCode.INVALID_TEAM_NAME);
