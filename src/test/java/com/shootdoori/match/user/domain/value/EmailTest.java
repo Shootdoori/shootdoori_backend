@@ -12,13 +12,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 class EmailTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트")
-    void of() {
+    @DisplayName("생성자 테스트")
+    void constructor() {
         // given
         String emailStr = "gamza@kangwon.ac.kr";
 
         // when
-        Email email = Email.of(emailStr);
+        Email email = new Email(emailStr);
 
         // then
         assertThat(email).isNotNull();
@@ -28,21 +28,21 @@ class EmailTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("이메일 null 또는 빈 문자열 테스트")
-    void of_Fail_By_Blank_or_Null(String emailStr) {
-        assertThatThrownBy(() -> Email.of(emailStr))
+    void constructor_Fail_By_Blank_or_Null(String emailStr) {
+        assertThatThrownBy(() -> new Email(emailStr))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("이메일은 필수 입력 값입니다.");
     }
 
     @Test
     @DisplayName("이메일 255자 초과")
-    void of_Fail_By_Length_Over() {
+    void constructor_Fail_By_Length_Over() {
         // given
         String prefix = "a".repeat(250);
         String emailStr = prefix + "@kangwon.ac.kr";
 
         // when
-        assertThatThrownBy(() -> Email.of(emailStr))
+        assertThatThrownBy(() -> new Email(emailStr))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("이메일은 255자를 초과할 수 없습니다.");
     }
@@ -50,8 +50,8 @@ class EmailTest {
     @ParameterizedTest
     @ValueSource(strings = {"gamza@naver.com", "gamza@gmail.com", "gamzakangwon.ac.kr"})
     @DisplayName("학교 이메일 도메인 불일치")
-    void of_Fail_By_Invalid_Format(String emailStr) {
-        assertThatThrownBy(() -> Email.of(emailStr))
+    void constructor_Fail_By_Invalid_Format(String emailStr) {
+        assertThatThrownBy(() -> new Email(emailStr))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("학교 이메일은 'ac.kr' 도메인이어야 합니다.");
     }

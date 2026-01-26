@@ -11,13 +11,13 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 class PasswordTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트")
-    void of() {
+    @DisplayName("생성자 테스트")
+    void constructor() {
         // given
         String encodedPassword = "encodedPassword123";
 
         // when
-        Password password = Password.of(encodedPassword);
+        Password password = new Password(encodedPassword);
 
         // then
         assertThat(password).isNotNull();
@@ -27,8 +27,8 @@ class PasswordTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("인코딩된 패스워드 null 또는 빈 문자열 테스트")
-    void of_Fail_By_Blank_or_Null(String encodedPassword) {
-        assertThatThrownBy(() -> Password.of(encodedPassword))
+    void constructor_Fail_By_Blank_or_Null(String encodedPassword) {
+        assertThatThrownBy(() -> new Password(encodedPassword))
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessage("인코딩된 패스워드는 비어 있을 수 없습니다.");
     }

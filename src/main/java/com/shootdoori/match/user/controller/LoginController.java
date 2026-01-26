@@ -1,17 +1,16 @@
 package com.shootdoori.match.user.controller;
 
 import com.shootdoori.match.dto.LoginRequest;
-import com.shootdoori.match.dto.TokenRefreshRequest;
+import com.shootdoori.match.resolver.LoginUser;
 import com.shootdoori.match.user.dto.AuthTokenResponse;
+import com.shootdoori.match.user.dto.TokenRefreshRequest;
 import com.shootdoori.match.user.dto.UserCreateRequest;
 import com.shootdoori.match.user.service.AuthService;
+import com.shootdoori.match.user.service.TokenRefreshService;
 import com.shootdoori.match.user.service.UserCommandService;
-import com.shootdoori.match.resolver.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/auth")
 public class LoginController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     private final AuthService authService;
     private final UserCommandService userCommandService;
+    private final TokenRefreshService tokenRefreshService;
 
-    public LoginController(AuthService authService, UserCommandService userCommandService) {
+    public LoginController(AuthService authService, UserCommandService userCommandService,
+        TokenRefreshService tokenRefreshService) {
         this.authService = authService;
         this.userCommandService = userCommandService;
+        this.tokenRefreshService = tokenRefreshService;
     }
 
     @PostMapping("/login")
@@ -58,22 +59,23 @@ public class LoginController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthTokenResponse> refresh(
-        @RequestBody TokenRefreshRequest token
+        @RequestBody TokenRefreshRequest request
     ) {
-        return null;
+        return new ResponseEntity<>(tokenRefreshService.refresh(request), HttpStatus.OK);
     }
 
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(@RequestBody TokenRefreshRequest token) {
-
-        return null;
+        authService.logout(token.refreshToken());
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/logout-all")
     public ResponseEntity<Void> logoutAll(
         @LoginUser Long userId
     ) {
-        return null;
+        authService.logoutAll(userId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/login-cookie")
@@ -92,5 +94,4 @@ public class LoginController {
     ) {
         return null;
     }
-
 }

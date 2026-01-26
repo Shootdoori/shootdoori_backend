@@ -1,41 +1,39 @@
 package com.shootdoori.match.user.service;
 
 import com.shootdoori.match.dto.LoginRequest;
+import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.UnauthorizedException;
 import com.shootdoori.match.user.domain.DeviceType;
-import com.shootdoori.match.user.util.GeneratedToken;
 import com.shootdoori.match.user.domain.User;
 import com.shootdoori.match.user.dto.AuthTokenResponse;
 import com.shootdoori.match.user.repository.RefreshTokenRepository;
+import com.shootdoori.match.user.util.GeneratedToken;
 import com.shootdoori.match.user.util.TokenIssuer;
-import com.shootdoori.match.exception.common.ErrorCode;
-import com.shootdoori.match.exception.common.UnauthorizedException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.shootdoori.match.user.util.JwtUtil;
+import io.jsonwebtoken.Claims;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class AuthService {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
     private final UserQueryService userQueryService;
     private final PasswordEncoder passwordEncoder;
     private final TokenIssuer tokenIssuer;
     private final RefreshTokenRepository refreshTokenRepository;
-
-    private static final String LOG_LOGIN_SUCCESS = "User login success: email={}, device={}";
-    private static final String LOG_LOGIN_FAIL = "Login failed: email={}, reason={}";
+    private final JwtUtil jwtUtil;
 
     public AuthService(UserQueryService userQueryService, PasswordEncoder passwordEncoder,
-        TokenIssuer tokenIssuer, RefreshTokenRepository refreshTokenRepository) {
+        TokenIssuer tokenIssuer, RefreshTokenRepository refreshTokenRepository, JwtUtil jwtUtil) {
         this.userQueryService = userQueryService;
         this.passwordEncoder = passwordEncoder;
         this.tokenIssuer = tokenIssuer;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.jwtUtil = jwtUtil;
     }
 
-    @Transactional
     public AuthTokenResponse login(LoginRequest request, String userAgent) {
         User user = userQueryService.findByEmail(request.email());
         validatePasswordMatch(request, user);
@@ -44,32 +42,29 @@ public class AuthService {
         GeneratedToken generatedToken = tokenIssuer.issue(user, deviceType, userAgent);
 
         saveRefreshToken(generatedToken);
-        logLoginSuccess(userAgent, user);
 
-        return createAuthTokenResponse(generatedToken);
-    }
-
-    private void logLoginSuccess(String userAgent, User user) {
-        log.info(LOG_LOGIN_SUCCESS, user.getEmail(), userAgent);
+        return AuthTokenResponse.from(generatedToken);
     }
 
     private void saveRefreshToken(GeneratedToken generatedToken) {
         refreshTokenRepository.save(generatedToken.refreshToken());
     }
 
-    private void validatePasswordMatch(LoginRequest request, User user) {
-        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
-            log.warn(LOG_LOGIN_FAIL, request.email(), "Password mismatch");
-            throw new UnauthorizedException(ErrorCode.FAIL_LOGIN);
-        }
+    public void logout(String refreshToken) {
+        Claims claims = jwtUtil.getClaims(refreshToken);
+        String tokenId = claims.getId();
+
+        refreshTokenRepository.deleteById(tokenId);
     }
 
-    private AuthTokenResponse createAuthTokenResponse(GeneratedToken generatedToken) {
-        return new AuthTokenResponse(
-            generatedToken.authToken().accessToken(),
-            generatedToken.authToken().refreshToken(),
-            generatedToken.authToken().accessTokenExpiresIn(),
-            generatedToken.authToken().refreshTokenExpiresIn()
-        );
+    public void logoutAll(Long userId) {
+        User user = userQueryService.findByIdForEntity(userId);
+        refreshTokenRepository.deleteByUser(user);
+    }
+
+    private void validatePasswordMatch(LoginRequest request, User user) {
+        if (!passwordEncoder.matches(request.password(), user.getPassword())) {
+            throw new UnauthorizedException(ErrorCode.FAIL_LOGIN);
+        }
     }
 }

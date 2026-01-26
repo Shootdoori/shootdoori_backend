@@ -26,7 +26,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorize -> authorize
 
                     .requestMatchers("/", "/health", "/delete", "/login", "/actuator/health").permitAll()
-                    .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/login-cookie", "/api/auth/refresh", "/api/auth/logout-cookie").permitAll()
+                    .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/login-cookie", "/api/auth/refresh", "/api/auth/logout-cookie", "/api/auth/logout").permitAll()
                     .requestMatchers("/h2-console/**").permitAll()
 
                     .requestMatchers(HttpMethod.GET, "/images/**").permitAll()

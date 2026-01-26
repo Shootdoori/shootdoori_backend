@@ -11,13 +11,9 @@ public class Department {
 
     protected Department() {}
 
-    private Department(String value) {
+    public Department(String value) {
         validate(value);
         this.value = value;
-    }
-
-    public static Department of(String value) {
-        return new Department(value);
     }
 
     private void validate(String dept) {

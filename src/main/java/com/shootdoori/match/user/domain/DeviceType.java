@@ -1,29 +1,33 @@
 package com.shootdoori.match.user.domain;
 
-import org.springframework.util.StringUtils;
+import java.util.List;
+import java.util.stream.Stream;
 
 public enum DeviceType {
-    ANDROID,
-    IOS,
-    WEB,
-    UNKNOWN;
+    ANDROID("안드로이드", List.of("android")),
+    IOS("아이폰", List.of("iphone", "ipad", "ios")),
+    WEB("웹", List.of("windows", "mac", "linux")),
+    UNKNOWN("그 외", List.of());
+
+    private final String type;
+    private final List<String> keywords;
+
+    DeviceType(String type, List<String> keywords) {
+        this.type = type;
+        this.keywords = keywords;
+    }
 
     public static DeviceType fromUserAgent(String userAgent) {
-        if (!StringUtils.hasText(userAgent)) {
-            return UNKNOWN;
+        if (userAgent == null) {
+            return DeviceType.UNKNOWN;
         }
 
-        String lower = userAgent.toLowerCase();
-        if (lower.contains("android")) {
-            return ANDROID;
-        }
-        if (lower.contains("iphone") || lower.contains("ipad")) {
-            return IOS;
-        }
-        if (lower.contains("windows") || lower.contains("mac") || lower.contains("linux")) {
-            return WEB;
-        }
+        String lowerUserAgent = userAgent.toLowerCase();
 
-        return UNKNOWN;
+        return Stream.of(values())
+            .filter(type -> type.keywords.stream()
+                .anyMatch(keyword -> lowerUserAgent.contains(keyword)))
+            .findFirst()
+            .orElse(DeviceType.UNKNOWN);
     }
 }

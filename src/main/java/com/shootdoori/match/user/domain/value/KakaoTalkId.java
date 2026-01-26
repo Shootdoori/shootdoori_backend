@@ -10,13 +10,9 @@ public class KakaoTalkId {
 
     protected KakaoTalkId() {}
 
-    private KakaoTalkId(String value) {
+    public KakaoTalkId(String value) {
         validate(value);
         this.value = value;
-    }
-
-    public static KakaoTalkId of(String value) {
-        return new KakaoTalkId(value);
     }
 
     private void validate(String kakaoTalkId) {

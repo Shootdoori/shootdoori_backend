@@ -29,7 +29,7 @@ public class UserQueryService {
     }
 
     public User findByEmail(String email) {
-        return userRepository.findByEmail(Email.of(email))
+        return userRepository.findByEmail(new Email(email))
             .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
     }
 
@@ -39,7 +39,7 @@ public class UserQueryService {
     }
 
     public void validateEmailNotDuplicated(String email) {
-        if (userRepository.existsByEmail(Email.of(email))) {
+        if (userRepository.existsByEmail(new Email(email))) {
             throw new DuplicatedException(ErrorCode.DUPLICATED_USER);
         }
     }

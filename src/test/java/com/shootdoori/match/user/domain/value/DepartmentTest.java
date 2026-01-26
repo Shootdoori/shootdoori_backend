@@ -11,13 +11,13 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 class DepartmentTest {
 
     @Test
-    @DisplayName("팩토리 메서드 of 테스트")
-    void of() {
+    @DisplayName("생성자 테스트")
+    void constructor() {
         // given
         String departmentName = "영업부서";
 
         // when
-        Department department = Department.of(departmentName);
+        Department department = new Department(departmentName);
 
         // then
         assertThat(department).isNotNull();
@@ -26,20 +26,20 @@ class DepartmentTest {
     @ParameterizedTest
     @NullAndEmptySource
     @DisplayName("학과 이름 null 또는 빈 문자열 테스트")
-    void of_Fail_By_Blank_or_Null(String departmentName) {
+    void constructor_Fail_By_Blank_or_Null(String departmentName) {
         // when
-        assertThatThrownBy(() -> Department.of(departmentName)).isInstanceOf(
+        assertThatThrownBy(() -> new Department(departmentName)).isInstanceOf(
             IllegalArgumentException.class);
     }
 
     @Test
     @DisplayName("학과 이름 100자 초과")
-    void of_Fail_By_Length_Over() {
+    void constructor_Fail_By_Length_Over() {
         // given
         String departmentName = "*".repeat(101);
 
         // when
-        assertThatThrownBy(() -> Department.of(departmentName)).isInstanceOf(
+        assertThatThrownBy(() -> new Department(departmentName)).isInstanceOf(
             IllegalArgumentException.class);
     }
 }

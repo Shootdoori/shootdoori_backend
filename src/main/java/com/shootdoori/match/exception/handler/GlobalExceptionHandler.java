@@ -6,6 +6,8 @@ import com.shootdoori.match.exception.common.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -64,6 +66,16 @@ public class GlobalExceptionHandler {
         log.error("[GlobalExceptionHandler] Unexpected Exception occurred", e);
         ErrorResponse response = new ErrorResponse("INTERNAL_SERVER_ERROR", "Unexpected server error occurred.");
         return ResponseEntity.internalServerError().body(response);
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ErrorResponse> handleOptimisticLockingFailureException(ObjectOptimisticLockingFailureException e) {
+        log.warn("[GlobalExceptionHandler] Optimistic locking failure: {}", e.getMessage());
+
+        ErrorCode errorCode = ErrorCode.INVALID_TOKEN;
+        return ResponseEntity
+            .status(errorCode.getHttpStatus())
+            .body(ErrorResponse.of(errorCode, "동시 요청이 감지되었습니다. 다시 로그인해주세요."));
     }
 
     public static class ErrorResponse {
