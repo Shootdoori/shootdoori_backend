@@ -1,5 +1,8 @@
 package com.shootdoori.match.config;
 
+import com.shootdoori.match.resolver.JwtAuthenticationFilter;
+import com.shootdoori.match.user.service.AuthService;
+import com.shootdoori.match.user.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,39 +13,46 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+        JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
             .httpBasic(config -> config.disable())
             .csrf(config -> config.disable())
             .headers(headers ->
                 headers.frameOptions(frameOptions -> frameOptions.sameOrigin())
             )
-            .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .sessionManagement(
+                config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
 
-                    .requestMatchers("/", "/health", "/delete", "/login", "/actuator/health").permitAll()
-                    .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/login-cookie", "/api/auth/refresh", "/api/auth/logout-cookie", "/api/auth/logout").permitAll()
-                    .requestMatchers("/h2-console/**").permitAll()
+                .requestMatchers("/", "/health", "/delete", "/login", "/actuator/health")
+                .permitAll()
+                .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/login-cookie",
+                    "/api/auth/refresh", "/api/auth/logout-cookie", "/api/auth/logout").permitAll()
+                .requestMatchers("/h2-console/**").permitAll()
 
-                    .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/images/**").permitAll()
 
-                    .requestMatchers(HttpMethod.GET, "/api/teams/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/teams/**").permitAll()
 
-                    .requestMatchers(HttpMethod.GET, "/api/venues/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/venues/**").permitAll()
 
-                    .requestMatchers(HttpMethod.POST, "/api/password-reset/**").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/auth/signup/email/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/password-reset/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/auth/signup/email/**").permitAll()
 
-                    .anyRequest().authenticated()
+                .anyRequest().authenticated()
             )
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(authenticationEntryPoint())
-            );
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -52,8 +62,16 @@ public class SecurityConfig {
         return (request, response, authException) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"" + authException.getMessage() + "\"}");
+            response.getWriter().write(
+                "{\"error\": \"Unauthorized\", \"message\": \"" + authException.getMessage()
+                    + "\"}");
         };
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(AuthService authService, JwtUtil jwtUtil,
+        HandlerExceptionResolver handlerExceptionResolver) {
+        return new JwtAuthenticationFilter(authService, jwtUtil, handlerExceptionResolver);
     }
 
     @Bean

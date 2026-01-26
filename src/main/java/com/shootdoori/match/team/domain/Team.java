@@ -35,7 +35,7 @@ public class Team {
     private TeamName teamName;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "team_type", nullable = false, length = 20)
+    @Column(name = "team_type", nullable = false)
     private TeamType teamType;
 
     @Embedded
