@@ -1,4 +1,4 @@
-package com.shootdoori.match.controller;
+package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.dto.LineupMemberRequestDto;
 import com.shootdoori.match.dto.LineupMemberResponseDto;
