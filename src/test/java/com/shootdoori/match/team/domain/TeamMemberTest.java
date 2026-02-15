@@ -68,17 +68,17 @@ class TeamMemberTest {
     }
 
     @Test
-    @DisplayName("validateJoinDecisionAuthority - 가입 승인 권한이 있는 경우 성공 테스트")
-    void validateJoinDecisionAuthority_Success() {
+    @DisplayName("validateLeaderAuthority - 가입 승인 권한이 있는 경우 성공 테스트")
+    void validateLeaderAuthority_Success() {
         // when & then
-        loginMember.validateJoinDecisionAuthority();
+        loginMember.validateLeaderAuthority();
     }
 
     @Test
-    @DisplayName("validateJoinDecisionAuthority - 가입 승인 권한이 없는 경우 예외 발생 테스트")
-    void validateJoinDecisionAuthority_NoAuthority_Exception() {
+    @DisplayName("validateLeaderAuthority - 가입 승인 권한이 없는 경우 예외 발생 테스트")
+    void validateLeaderAuthority_NoAuthority_Exception() {
         // when & then
-        assertThatThrownBy(() -> basicMember.validateJoinDecisionAuthority())
+        assertThatThrownBy(() -> basicMember.validateLeaderAuthority())
             .isInstanceOf(NoPermissionException.class);
     }
 

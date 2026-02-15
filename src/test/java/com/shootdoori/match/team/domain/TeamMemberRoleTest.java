@@ -92,24 +92,24 @@ class TeamMemberRoleTest {
     }
 
     @Test
-    @DisplayName("validateJoinDecisionAuthority - 회장은 가입 승인 권한이 있다")
-    void validateJoinDecisionAuthority_Leader_Success() {
+    @DisplayName("validateLeaderAuthority - 회장은 가입 승인 권한이 있다")
+    void validateLeaderAuthority_Leader_Success() {
         // when & then
-        LEADER_ROLE.validateJoinDecisionAuthority();
+        LEADER_ROLE.validateLeaderAuthority();
     }
 
     @Test
-    @DisplayName("validateJoinDecisionAuthority - 부회장은 가입 승인 권한이 있다")
-    void validateJoinDecisionAuthority_ViceLeader_Success() {
+    @DisplayName("validateLeaderAuthority - 부회장은 가입 승인 권한이 있다")
+    void validateLeaderAuthority_ViceLeader_Success() {
         // when & then
-        VICE_LEADER_ROLE.validateJoinDecisionAuthority();
+        VICE_LEADER_ROLE.validateLeaderAuthority();
     }
 
     @Test
-    @DisplayName("validateJoinDecisionAuthority - 일반 멤버는 가입 승인 권한이 없다")
-    void validateJoinDecisionAuthority_Fail() {
+    @DisplayName("validateLeaderAuthority - 일반 멤버는 가입 승인 권한이 없다")
+    void validateLeaderAuthority_Fail() {
         // when & then
-        assertThatThrownBy(() -> MEMBER_ROLE.validateJoinDecisionAuthority())
+        assertThatThrownBy(() -> MEMBER_ROLE.validateLeaderAuthority())
             .isInstanceOf(NoPermissionException.class);
     }
 }
