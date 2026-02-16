@@ -39,7 +39,10 @@ public class LineupMember {
     protected LineupMember() {
     }
 
-    public LineupMember(LineupMembers lineupMembers, Long teamMemberId, Position position, boolean isStarter) {
+    public LineupMember(LineupMembers lineupMembers, Long teamMemberId, Position position,
+        boolean isStarter) {
+        validateRequiredFields(lineupMembers, teamMemberId, position);
+
         this.lineupMembers = lineupMembers;
         this.teamMemberId = teamMemberId;
         this.position = position;
@@ -60,5 +63,18 @@ public class LineupMember {
 
     public boolean isSameTeamMember(Long teamMemberId) {
         return Objects.equals(this.teamMemberId, teamMemberId);
+    }
+
+    private void validateRequiredFields(LineupMembers lineupMembers, Long teamMemberId,
+        Position position) {
+        if (lineupMembers == null) {
+            throw new IllegalArgumentException("lineupMembers는 필수입니다.");
+        }
+        if (teamMemberId == null) {
+            throw new IllegalArgumentException("teamMemberId는 필수입니다.");
+        }
+        if (position == null) {
+            throw new IllegalArgumentException("position은 필수입니다.");
+        }
     }
 }
