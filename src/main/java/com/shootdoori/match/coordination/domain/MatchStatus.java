@@ -1,4 +1,4 @@
-﻿package com.shootdoori.match.coordination.domain;
+package com.shootdoori.match.coordination.domain;
 
 public enum MatchStatus {
     WAITING("대기중"),

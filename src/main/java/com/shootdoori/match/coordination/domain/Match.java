@@ -1,4 +1,4 @@
-﻿package com.shootdoori.match.coordination.domain;
+package com.shootdoori.match.coordination.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
 import jakarta.persistence.Column;
@@ -75,10 +75,6 @@ public class Match {
 
     private LocalDateTime calculateExpiresAt(LocalDate preferredDate) {
         return preferredDate.minusDays(1).atTime(23, 59, 59);
-    }
-
-    public void match(Long awayTeamId, LocalDateTime matchAt) {
-        match(awayTeamId, null, matchAt);
     }
 
     public void match(Long awayTeamId, Long awayLineupId, LocalDateTime matchAt) {
