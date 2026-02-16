@@ -1,8 +1,5 @@
 package com.shootdoori.match.coordination.domain;
 
-import com.shootdoori.match.exception.common.BusinessException;
-import com.shootdoori.match.exception.common.ErrorCode;
-
 public enum MatchApplicationStatus {
     PENDING("신청대기중"),
     ACCEPTED("수락됨"),
@@ -15,7 +12,7 @@ public enum MatchApplicationStatus {
 
     public void validatePending() {
         if (!isPending()) {
-            throw new BusinessException(ErrorCode.ALREADY_MATCH_REQUEST);
+            throw new IllegalStateException("신청 대기중 상태가 아닙니다.");
         }
     }
 
