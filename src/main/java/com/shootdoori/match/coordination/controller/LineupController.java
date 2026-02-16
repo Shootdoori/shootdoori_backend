@@ -20,7 +20,7 @@ public class LineupController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<LineupMemberResponseDto>> getById(@PathVariable Long id) {
+    public ResponseEntity<List<LineupMemberResponseDto>> findById(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
