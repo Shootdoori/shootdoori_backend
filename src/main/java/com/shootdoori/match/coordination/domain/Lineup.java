@@ -74,4 +74,6 @@ public class Lineup {
     public Long getMatchId() {
         return matchId;
     }
+
+    public Long getTeamId() { return teamId; }
 }
