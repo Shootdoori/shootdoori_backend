@@ -1,4 +1,4 @@
-package com.shootdoori.match.controller;
+package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.dto.RecentMatchesResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/teams")
-public class MatchStartController {
+public class TeamMatchController {
 
     @GetMapping("/me/matches")
     public ResponseEntity<List<RecentMatchesResponseDto>> getRecentCompletedMatches(
@@ -29,3 +29,4 @@ public class MatchStartController {
         return null;
     }
 }
+

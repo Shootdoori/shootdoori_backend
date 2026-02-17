@@ -37,7 +37,7 @@ public enum TeamMemberRole {
         return this == LEADER || this == VICE_LEADER;
     }
 
-    public void validateJoinDecisionAuthority() {
+    public void validateLeaderAuthority() {
         if (this != LEADER && this != VICE_LEADER) {
             throw new NoPermissionException(ErrorCode.NO_PERMISSION);
         }

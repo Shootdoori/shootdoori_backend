@@ -82,13 +82,13 @@ public class TeamMember {
     }
 
     public void delegateRole(TeamMember targetMember, TeamMemberRole role) {
-        validateJoinDecisionAuthority();
+        validateLeaderAuthority();
         this.role = TeamMemberRole.MEMBER;
         targetMember.role = role;
     }
 
-    public void validateJoinDecisionAuthority() {
-        role.validateJoinDecisionAuthority();
+    public void validateLeaderAuthority() {
+        role.validateLeaderAuthority();
     }
 
     public void validateKickAuthority(TeamMember targetMember) {

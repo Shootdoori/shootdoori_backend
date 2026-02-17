@@ -44,7 +44,7 @@ public class TeamMemberCommandService {
         Team team = teamQueryService.findByIdForEntity(teamId);
         TeamMember loginMember = teamMemberQueryService.findByTeamIdAndUserIdForEntity(teamId,
             loginUserId);
-        loginMember.validateJoinDecisionAuthority();
+        loginMember.validateLeaderAuthority();
 
         TeamMember targetMember = teamMemberQueryService.findByTeamIdAndUserIdForEntity(teamId,
             targetUserId);
@@ -62,7 +62,7 @@ public class TeamMemberCommandService {
 
     public void kick(Long teamId, Long userId, Long loginUserId) {
         TeamMember loginMember = teamMemberQueryService.findByTeamIdAndUserIdForEntity(teamId, loginUserId);
-        loginMember.validateJoinDecisionAuthority();
+        loginMember.validateLeaderAuthority();
 
         TeamMember targetMember = teamMemberQueryService.findByTeamIdAndUserIdForEntity(teamId, userId);
         loginMember.validateKickAuthority(targetMember);

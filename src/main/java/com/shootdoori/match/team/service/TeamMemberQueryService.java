@@ -70,6 +70,13 @@ public class TeamMemberQueryService {
         TeamMember teamMember = teamMemberRepository.findByTeamIdAndUserId(teamId, userId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.TEAM_MEMBER_NOT_FOUND));
 
-        teamMember.validateJoinDecisionAuthority();
+        teamMember.validateLeaderAuthority();
+    }
+
+    public Long getTeamIdByUserId(Long userId) {
+        TeamMember teamMember = findByUserIdForEntity(userId);
+        teamMember.validateLeaderAuthority();
+        
+        return teamMember.getTeam().getId();
     }
 }

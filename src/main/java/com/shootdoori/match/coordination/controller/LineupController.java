@@ -1,4 +1,4 @@
-package com.shootdoori.match.controller;
+package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.dto.LineupMemberRequestDto;
 import com.shootdoori.match.dto.LineupMemberResponseDto;
@@ -20,7 +20,7 @@ public class LineupController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<LineupMemberResponseDto>> getById(@PathVariable Long id) {
+    public ResponseEntity<List<LineupMemberResponseDto>> findById(@PathVariable Long id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
