@@ -7,6 +7,7 @@ import com.shootdoori.match.user.dto.ProfileResponse;
 import com.shootdoori.match.user.dto.ProfileUpdateRequest;
 import com.shootdoori.match.user.dto.UserCreateRequest;
 import com.shootdoori.match.user.mapper.UserMapper;
+import com.shootdoori.match.user.repository.RefreshTokenRepository;
 import com.shootdoori.match.user.repository.UserRepository;
 import com.shootdoori.match.user.domain.value.Bio;
 import com.shootdoori.match.user.domain.value.Department;
@@ -28,13 +29,16 @@ public class UserCommandService {
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
     private final UserQueryService userQueryService;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public UserCommandService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-        UserMapper userMapper, UserQueryService userQueryService) {
+        UserMapper userMapper, UserQueryService userQueryService,
+        RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.userMapper = userMapper;
         this.userQueryService = userQueryService;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     public ProfileResponse create(UserCreateRequest createRequest) {
@@ -73,6 +77,7 @@ public class UserCommandService {
 
     public void delete(Long id) {
         User user = userQueryService.findByIdForEntity(id);
+        refreshTokenRepository.deleteByUser(user);
         userRepository.delete(user);
     }
 }
