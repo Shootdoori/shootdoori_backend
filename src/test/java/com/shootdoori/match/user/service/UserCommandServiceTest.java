@@ -18,6 +18,7 @@ import com.shootdoori.match.user.domain.value.UserName;
 import com.shootdoori.match.user.dto.ProfileResponse;
 import com.shootdoori.match.user.dto.ProfileUpdateRequest;
 import com.shootdoori.match.user.mapper.UserMapper;
+import com.shootdoori.match.user.repository.RefreshTokenRepository;
 import com.shootdoori.match.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,13 +41,15 @@ class UserCommandServiceTest {
     private UserMapper userMapper;
     @Mock
     private UserQueryService userQueryService;
+    @Mock
+    private RefreshTokenRepository refreshTokenRepository;
 
     private UserCommandService userCommandService;
 
     @BeforeEach
     void setUp() {
         userCommandService = new UserCommandService(userRepository, passwordEncoder, userMapper,
-            userQueryService);
+            userQueryService, refreshTokenRepository);
     }
 
     @Test
