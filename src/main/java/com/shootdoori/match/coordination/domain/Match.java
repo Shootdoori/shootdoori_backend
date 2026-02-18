@@ -187,5 +187,13 @@ public class Match {
     public MatchStatus getStatus() {
         return status;
     }
+
+    public LocalDateTime getCreatedAt() {
+        return timeStamp.getCreatedAt();
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return timeStamp.getUpdatedAt();
+    }
 }
 
