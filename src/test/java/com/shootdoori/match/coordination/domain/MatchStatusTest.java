@@ -22,7 +22,8 @@ class MatchStatusTest {
     @DisplayName("매치됨/취소됨/종료됨 상태는 매칭이 불가능하다")
     void validateMatchable_fail(MatchStatus status) {
         // when & then
-        assertThatThrownBy(() -> status.validateMatchable()).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> status.validateMatchable()).isInstanceOf(
+            IllegalStateException.class);
     }
 
     @ParameterizedTest
@@ -38,7 +39,8 @@ class MatchStatusTest {
     @DisplayName("취소됨/종료됨 상태는 취소가 불가능하다")
     void validateCancelable_fail(MatchStatus status) {
         // when & then
-        assertThatThrownBy(() -> status.validateCancelable()).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> status.validateCancelable()).isInstanceOf(
+            IllegalStateException.class);
     }
 
     @ParameterizedTest
@@ -54,6 +56,24 @@ class MatchStatusTest {
     @DisplayName("대기중/취소됨/종료됨 상태는 종료가 불가능하다")
     void validateFinishable_fail(MatchStatus status) {
         // when & then
-        assertThatThrownBy(() -> status.validateFinishable()).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> status.validateFinishable()).isInstanceOf(
+            IllegalStateException.class);
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = MatchStatus.class, names = "WAITING")
+    @DisplayName("대기 상태에서는 대기 상태 검증이 통과한다")
+    void validateWaitingStatus_success(MatchStatus status) {
+        // when & then
+        assertThatCode(() -> status.validateWaitingStatus()).doesNotThrowAnyException();
+    }
+
+    @ParameterizedTest
+    @EnumSource(value = MatchStatus.class, names = {"MATCHED", "CANCELED", "FINISHED"})
+    @DisplayName("대기 상태가 아니면 대기 상태 검증 시 예외가 발생한다")
+    void validateWaitingStatus_fail(MatchStatus status) {
+        // when & then
+        assertThatThrownBy(() -> status.validateWaitingStatus()).isInstanceOf(
+            IllegalStateException.class);
     }
 }

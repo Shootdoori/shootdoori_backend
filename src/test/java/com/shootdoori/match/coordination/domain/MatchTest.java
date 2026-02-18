@@ -143,6 +143,27 @@ class MatchTest {
         assertThatThrownBy(() -> finishedMatch.finish()).isInstanceOf(IllegalStateException.class);
     }
 
+    @Test
+    @DisplayName("대기 상태에서는 validateWaitingStatus 검증을 통과한다")
+    void validateWaitingStatus_대기상태_성공() {
+        // given
+        Match waitingMatch = createMatch();
+
+        // when & then
+        waitingMatch.validateWaitingStatus();
+    }
+
+    @Test
+    @DisplayName("대기 상태가 아니면 validateWaitingStatus 호출 시 예외가 발생한다")
+    void validateWaitingStatus_대기상태아니면_실패() {
+        // given
+        Match matchedMatch = createMatchedMatch();
+
+        // when & then
+        assertThatThrownBy(matchedMatch::validateWaitingStatus)
+            .isInstanceOf(IllegalStateException.class);
+    }
+
     private Match createMatch() {
         return new Match(
             HOME_TEAM_ID,
