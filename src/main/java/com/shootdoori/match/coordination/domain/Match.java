@@ -1,6 +1,8 @@
 package com.shootdoori.match.coordination.domain;
 
 import com.shootdoori.match.entity.common.TimeStamp;
+import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.NoPermissionException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -47,6 +49,12 @@ public class Match {
     @Column(name = "venue_id", nullable = false)
     private Long venueId;
 
+    @Column(name = "university_only", nullable = false)
+    private boolean universityOnly;
+
+    @Column(name = "message", length = 500)
+    private String message;
+
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
@@ -64,10 +72,14 @@ public class Match {
     }
 
     public Match(Long homeTeamId, LocalDate preferredDate, LocalTime preferredTimeStart,
-        LocalTime preferredTimeEnd, Long venueId, Long homeLineupId) {
+        LocalTime preferredTimeEnd, Long venueId, boolean universityOnly, String message,
+        Long homeLineupId) {
         this.homeTeamId = homeTeamId;
-        this.preferredSchedule = new PreferredSchedule(preferredDate, preferredTimeStart, preferredTimeEnd);
+        this.preferredSchedule = new PreferredSchedule(preferredDate, preferredTimeStart,
+            preferredTimeEnd);
         this.venueId = venueId;
+        this.universityOnly = universityOnly;
+        this.message = message;
         this.homeLineupId = homeLineupId;
         this.expiresAt = calculateExpiresAt(preferredDate);
         this.status = MatchStatus.WAITING;
@@ -93,6 +105,12 @@ public class Match {
     public void finish() {
         status.validateFinishable();
         this.status = MatchStatus.FINISHED;
+    }
+
+    public void validateHomeTeam(Long loginTeamId) {
+        if (!homeTeamId.equals(loginTeamId)) {
+            throw new NoPermissionException(ErrorCode.MATCH_WAITING_OWNERSHIP_VIOLATION);
+        }
     }
 
     public Long getId() {
@@ -133,6 +151,14 @@ public class Match {
 
     public Long getVenueId() {
         return venueId;
+    }
+
+    public boolean isUniversityOnly() {
+        return universityOnly;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public LocalDateTime getExpiresAt() {

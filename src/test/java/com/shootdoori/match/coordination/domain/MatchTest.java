@@ -19,6 +19,8 @@ class MatchTest {
     private static final LocalDate PREFERRED_DATE = LocalDate.of(2026, 2, 10);
     private static final LocalTime PREFERRED_TIME_START = LocalTime.of(14, 0);
     private static final LocalTime PREFERRED_TIME_END = LocalTime.of(16, 0);
+    private static final Boolean UNIVERSITY_ONLY = true;
+    private static final String MESSAGE = "좋은 경기해요!";
 
     @Test
     @DisplayName("매치 생성 시 만료시간은 선호 날짜 하루 전 23:59:59로 계산된다")
@@ -57,6 +59,8 @@ class MatchTest {
         assertThat(match.getPreferredTimeStart()).isEqualTo(PREFERRED_TIME_START);
         assertThat(match.getPreferredTimeEnd()).isEqualTo(PREFERRED_TIME_END);
         assertThat(match.getVenueId()).isEqualTo(VENUE_ID);
+        assertThat(match.isUniversityOnly()).isEqualTo(UNIVERSITY_ONLY);
+        assertThat(match.getMessage()).isEqualTo(MESSAGE);
         assertThat(match.getStatus()).isEqualTo(MatchStatus.WAITING);
         assertThat(match.getAwayTeamId()).isNull();
         assertThat(match.getAwayLineupId()).isNull();
@@ -146,6 +150,8 @@ class MatchTest {
             PREFERRED_TIME_START,
             PREFERRED_TIME_END,
             VENUE_ID,
+            UNIVERSITY_ONLY,
+            MESSAGE,
             HOME_LINEUP_ID
         );
     }
