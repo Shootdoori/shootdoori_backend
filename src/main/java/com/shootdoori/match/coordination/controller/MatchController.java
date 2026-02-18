@@ -7,7 +7,6 @@ import com.shootdoori.match.dto.MatchCreateResponseDto;
 import com.shootdoori.match.dto.MatchWaitingCancelResponseDto;
 import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
-import com.shootdoori.match.team.service.TeamMemberQueryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -27,12 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MatchController {
 
     private final MatchCommandService matchCommandService;
-    private final TeamMemberQueryService teamMemberQueryService;
-
-    public MatchController(MatchCommandService matchCommandService,
-        TeamMemberQueryService teamMemberQueryService) {
+    public MatchController(MatchCommandService matchCommandService) {
         this.matchCommandService = matchCommandService;
-        this.teamMemberQueryService = teamMemberQueryService;
     }
 
     @PostMapping
@@ -40,11 +35,8 @@ public class MatchController {
         @LoginUser Long loginUserId,
         @RequestBody MatchCreateRequestDto matchCreateRequestDto
     ) {
-        Long homeTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
-        MatchCreateResponseDto responseDto = matchCommandService.create(homeTeamId,
-            matchCreateRequestDto);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(matchCommandService.create(loginUserId, matchCreateRequestDto),
+            HttpStatus.CREATED);
     }
 
     @PutMapping("/waiting/{matchWaitingId}/cancel")
@@ -52,7 +44,8 @@ public class MatchController {
         @LoginUser Long loginUserId,
         @PathVariable Long matchWaitingId
     ) {
-        return null;
+        return new ResponseEntity<>(matchCommandService.cancel(loginUserId, matchWaitingId),
+            HttpStatus.OK);
     }
 
     @GetMapping("/waiting/me")
