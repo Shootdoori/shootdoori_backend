@@ -33,11 +33,6 @@ public class EnemyTeamQueryService {
         Long enemyTeamId = match.findEnemyTeamId(loginTeamId);
         Team enemyTeam = teamQueryService.findByIdForEntity(enemyTeamId);
 
-        return new EnemyTeamResponseDto(
-            enemyTeam.getId(),
-            enemyTeam.getTeamName(),
-            enemyTeam.getUniversityName(),
-            enemyTeam.getDescription()
-        );
+        return EnemyTeamResponseDto.from(enemyTeam);
     }
 }
