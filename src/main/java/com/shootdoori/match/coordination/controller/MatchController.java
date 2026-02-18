@@ -1,12 +1,14 @@
 package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.coordination.service.MatchCommandService;
+import com.shootdoori.match.coordination.service.MatchQueryService;
 import com.shootdoori.match.dto.EnemyTeamResponseDto;
 import com.shootdoori.match.dto.MatchCreateRequestDto;
 import com.shootdoori.match.dto.MatchCreateResponseDto;
 import com.shootdoori.match.dto.MatchWaitingCancelResponseDto;
 import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
+import com.shootdoori.match.team.service.TeamQueryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -25,8 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/matches")
 public class MatchController {
 
+    private final MatchQueryService matchQueryService;
     private final MatchCommandService matchCommandService;
-    public MatchController(MatchCommandService matchCommandService) {
+    public MatchController(MatchQueryService matchQueryService, MatchCommandService matchCommandService) {
+        this.matchQueryService = matchQueryService;
         this.matchCommandService = matchCommandService;
     }
 
@@ -51,9 +55,9 @@ public class MatchController {
     @GetMapping("/waiting/me")
     public ResponseEntity<Slice<MatchWaitingResponseDto>> findAll(
         @LoginUser Long loginUserId,
-        @PageableDefault(sort = "audit.createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(sort = "timeStamp.createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return null;
+        return new ResponseEntity<>(matchQueryService.findAll(loginUserId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{matchId}/enemyTeam")
