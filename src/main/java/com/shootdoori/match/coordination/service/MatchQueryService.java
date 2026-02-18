@@ -21,10 +21,7 @@ public class MatchQueryService {
     public Match findById(Long waitingId) {
         Match waiting = matchRepository.findById(waitingId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MATCH_WAITING_NOT_FOUND));
-
-        if (waiting.getStatus() != MatchStatus.WAITING) {
-            throw new NotFoundException(ErrorCode.MATCH_WAITING_NOT_FOUND);
-        }
+        waiting.validateWaitingStatus();
 
         return waiting;
     }

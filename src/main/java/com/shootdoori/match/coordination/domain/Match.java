@@ -113,6 +113,10 @@ public class Match {
         }
     }
 
+    public void validateWaitingStatus() {
+        status.validateWaitingStatus();
+    }
+
     public Long getId() {
         return id;
     }
