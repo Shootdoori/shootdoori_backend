@@ -3,15 +3,10 @@ package com.shootdoori.match.coordination.service;
 import com.shootdoori.match.coordination.domain.Match;
 import com.shootdoori.match.coordination.domain.MatchStatus;
 import com.shootdoori.match.coordination.repository.MatchRepository;
-import com.shootdoori.match.dto.EnemyTeamResponseDto;
 import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NotFoundException;
-import com.shootdoori.match.team.domain.Team;
-import com.shootdoori.match.team.domain.TeamMember;
-import com.shootdoori.match.team.domain.TeamMemberRole;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
-import com.shootdoori.match.user.domain.User;
 import java.time.LocalDateTime;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -48,17 +43,6 @@ public class MatchQueryService {
                 LocalDateTime.now(),
                 pageable
             )
-            .map(match -> new MatchWaitingResponseDto(
-                match.getId(),
-                match.getHomeTeamId(),
-                match.getPreferredDate(),
-                match.getPreferredTimeStart(),
-                match.getPreferredTimeEnd(),
-                match.getVenueId(),
-                match.isUniversityOnly(),
-                match.getMessage(),
-                match.getExpiresAt(),
-                match.getHomeLineupId()
-            ));
+            .map(MatchWaitingResponseDto::from);
     }
 }
