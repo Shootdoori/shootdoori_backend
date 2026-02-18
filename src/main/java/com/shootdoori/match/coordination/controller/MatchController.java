@@ -1,6 +1,7 @@
 package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.coordination.service.MatchCommandService;
+import com.shootdoori.match.coordination.service.EnemyTeamQueryService;
 import com.shootdoori.match.coordination.service.MatchQueryService;
 import com.shootdoori.match.dto.EnemyTeamResponseDto;
 import com.shootdoori.match.dto.MatchCreateRequestDto;
@@ -8,7 +9,6 @@ import com.shootdoori.match.dto.MatchCreateResponseDto;
 import com.shootdoori.match.dto.MatchWaitingCancelResponseDto;
 import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
-import com.shootdoori.match.team.service.TeamQueryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -29,9 +29,15 @@ public class MatchController {
 
     private final MatchQueryService matchQueryService;
     private final MatchCommandService matchCommandService;
-    public MatchController(MatchQueryService matchQueryService, MatchCommandService matchCommandService) {
+    private final EnemyTeamQueryService enemyTeamQueryService;
+    public MatchController(
+        MatchQueryService matchQueryService,
+        MatchCommandService matchCommandService,
+        EnemyTeamQueryService enemyTeamQueryService
+    ) {
         this.matchQueryService = matchQueryService;
         this.matchCommandService = matchCommandService;
+        this.enemyTeamQueryService = enemyTeamQueryService;
     }
 
     @PostMapping
@@ -65,6 +71,7 @@ public class MatchController {
         @LoginUser Long loginUserId,
         @PathVariable Long matchId
     ) {
-        return null;
+        return new ResponseEntity<>(enemyTeamQueryService.findEnemyTeam(loginUserId, matchId),
+            HttpStatus.OK);
     }
 }

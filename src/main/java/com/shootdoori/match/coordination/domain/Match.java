@@ -3,6 +3,7 @@ package com.shootdoori.match.coordination.domain;
 import com.shootdoori.match.entity.common.TimeStamp;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NoPermissionException;
+import com.shootdoori.match.exception.common.NotFoundException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -105,6 +106,20 @@ public class Match {
     public void finish() {
         status.validateFinishable();
         this.status = MatchStatus.FINISHED;
+    }
+
+    public Long findEnemyTeamId(Long loginTeamId) {
+        boolean home = homeTeamId.equals(loginTeamId);
+        boolean away = awayTeamId != null && awayTeamId.equals(loginTeamId);
+
+        if (!home && !away) {
+            throw new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED);
+        }
+        if (home && awayTeamId == null) {
+            throw new NotFoundException(ErrorCode.TEAM_NOT_FOUND);
+        }
+
+        return !home ? homeTeamId : awayTeamId;
     }
 
     public void validateHomeTeam(Long loginTeamId) {
