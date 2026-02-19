@@ -124,7 +124,13 @@ public class Match {
 
     public void validateHomeTeam(Long loginTeamId) {
         if (!homeTeamId.equals(loginTeamId)) {
-            throw new NoPermissionException(ErrorCode.MATCH_WAITING_OWNERSHIP_VIOLATION);
+            throw new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED);
+        }
+    }
+
+    public void validateNotApplyingToOwnTeam(Long requestTeamId) {
+        if (homeTeamId.equals(requestTeamId)) {
+            throw new IllegalStateException("자기 팀에는 매치 신청할 수 없습니다.");
         }
     }
 

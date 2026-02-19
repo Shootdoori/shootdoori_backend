@@ -1,9 +1,15 @@
 package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.coordination.service.MatchApplicationCommandService;
-import com.shootdoori.match.dto.*;
+import com.shootdoori.match.dto.MatchConfirmedResponseDto;
+import com.shootdoori.match.dto.MatchRequestHistoryResponseDto;
+import com.shootdoori.match.dto.MatchRequestRequestDto;
+import com.shootdoori.match.dto.MatchRequestResponseDto;
+import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -11,10 +17,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/matches")
@@ -37,7 +48,9 @@ public class MatchApplicationController {
         @PathVariable Long waitingId,
         @RequestBody MatchRequestRequestDto requestDto
     ) {
-        return null;
+        return new ResponseEntity<>(
+            matchApplicationCommandService.apply(loginUserId, waitingId, requestDto),
+            HttpStatus.CREATED);
     }
 
     @PutMapping("/requests/{requestId}/accept")
@@ -87,10 +100,6 @@ public class MatchApplicationController {
         @LoginUser Long loginUserId,
         @PathVariable Long requestId
     ) {
-        Long requestTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
-        MatchRequestResponseDto responseDto = matchApplicationCommandService.cancelRequest(
-            requestTeamId, requestId
-        );
-        return ResponseEntity.ok(responseDto);
+        return null;
     }
 }
