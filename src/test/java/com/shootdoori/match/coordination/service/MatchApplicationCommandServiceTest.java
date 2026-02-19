@@ -16,6 +16,7 @@ import com.shootdoori.match.dto.MatchRequestRequestDto;
 import com.shootdoori.match.dto.MatchRequestResponseDto;
 import com.shootdoori.match.exception.common.DuplicatedException;
 import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.NoPermissionException;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,6 +119,53 @@ class MatchApplicationCommandServiceTest {
         assertThatThrownBy(() ->
             matchApplicationCommandService.apply(loginUserId, waitingId, dto))
             .isInstanceOf(DuplicatedException.class);
+    }
+
+    @Test
+    @DisplayName("매치 신청 거절 성공 시 거절 처리 후 응답 DTO를 반환한다")
+    void reject_success() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        given(application.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(application.getId()).willReturn(requestId);
+        given(application.getRequestTeamId()).willReturn(30L);
+        given(application.getRequestMessage()).willReturn("요청");
+        given(application.getLineupId()).willReturn(7L);
+        given(waiting.getHomeTeamId()).willReturn(loginTeamId);
+
+        // when & then
+        MatchRequestResponseDto response = matchApplicationCommandService.reject(loginUserId, requestId);
+        assertThat(response.requestId()).isEqualTo(requestId);
+    }
+
+    @Test
+    @DisplayName("홈팀(매치 생성한 팀)이 아니면 매치 신청 거절 시 권한 예외가 발생한다")
+    void reject_fail_when_not_home_team() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        given(application.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        doThrow(new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED))
+            .when(waiting).validateHomeTeam(loginTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.reject(loginUserId, requestId))
+            .isInstanceOf(NoPermissionException.class);
     }
 
     @Test
