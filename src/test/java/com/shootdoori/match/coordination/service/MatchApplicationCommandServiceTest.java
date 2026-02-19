@@ -143,11 +143,13 @@ class MatchApplicationCommandServiceTest {
 
         // when & then
         MatchRequestResponseDto response = matchApplicationCommandService.reject(loginUserId, requestId);
+        verify(waiting).validateHomeTeam(loginTeamId);
+        verify(application).reject(loginTeamId);
         assertThat(response.requestId()).isEqualTo(requestId);
     }
 
     @Test
-    @DisplayName("홈팀(매치 생성한 팀)이 아니면 매치 신청 거절 시 권한 예외가 발생한다")
+    @DisplayName("홈팀이 아니면 매치 신청 거절 시 권한 예외가 발생한다")
     void reject_fail_when_not_home_team() {
         // given
         Long loginUserId = 1L;
@@ -165,6 +167,51 @@ class MatchApplicationCommandServiceTest {
 
         // when & then
         assertThatThrownBy(() -> matchApplicationCommandService.reject(loginUserId, requestId))
+            .isInstanceOf(NoPermissionException.class);
+    }
+
+    @Test
+    @DisplayName("매치 신청 취소 성공 시 취소 처리 후 정상적으로 응답을 반환한다")
+    void cancel_success() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        given(application.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(application.getId()).willReturn(requestId);
+        given(application.getRequestTeamId()).willReturn(loginTeamId);
+        given(application.getRequestMessage()).willReturn("요청");
+        given(application.getLineupId()).willReturn(7L);
+        given(waiting.getHomeTeamId()).willReturn(30L);
+
+        // when & then
+        MatchRequestResponseDto response = matchApplicationCommandService.cancel(loginUserId, requestId);
+        verify(application).cancel(loginTeamId);
+        assertThat(response.requestId()).isEqualTo(requestId);
+    }
+
+    @Test
+    @DisplayName("요청 팀이 아니면 매치 신청 취소 시 권한 예외가 발생한다")
+    void cancel_fail_when_not_request_team() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        doThrow(new NoPermissionException(ErrorCode.MATCH_REQUEST_OWNERSHIP_VIOLATION))
+            .when(application).cancel(loginTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.cancel(loginUserId, requestId))
             .isInstanceOf(NoPermissionException.class);
     }
 
