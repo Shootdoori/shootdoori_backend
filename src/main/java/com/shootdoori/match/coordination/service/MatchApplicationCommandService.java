@@ -58,6 +58,17 @@ public class MatchApplicationCommandService {
         return MatchRequestResponseDto.from(application, waiting);
     }
 
+    public MatchRequestResponseDto cancel(Long loginUserId, Long requestId) {
+        Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
+        MatchApplication application = matchApplicationQueryService.findByIdForEntity(requestId);
+
+        application.cancel(loginTeamId);
+
+        Match waiting = matchQueryService.findById(application.getMatchId());
+
+        return MatchRequestResponseDto.from(application, waiting);
+    }
+
     public void rejectAllPending(Long matchId, Long processorTeamId) {
         List<MatchApplication> pendingList = matchApplicationRepository.findAllByMatchIdAndStatus(
             matchId, MatchApplicationStatus.PENDING);

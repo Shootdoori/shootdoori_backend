@@ -32,14 +32,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MatchApplicationController {
 
     private final MatchApplicationCommandService matchApplicationCommandService;
-    private final TeamMemberQueryService teamMemberQueryService;
 
     public MatchApplicationController(
-        MatchApplicationCommandService matchApplicationCommandService,
-        TeamMemberQueryService teamMemberQueryService
+        MatchApplicationCommandService matchApplicationCommandService
     ) {
         this.matchApplicationCommandService = matchApplicationCommandService;
-        this.teamMemberQueryService = teamMemberQueryService;
     }
 
     @PostMapping("/{waitingId}/request")
@@ -101,6 +98,7 @@ public class MatchApplicationController {
         @LoginUser Long loginUserId,
         @PathVariable Long requestId
     ) {
-        return null;
+        return new ResponseEntity<>(matchApplicationCommandService.cancel(loginUserId,
+            requestId), HttpStatus.OK);
     }
 }
