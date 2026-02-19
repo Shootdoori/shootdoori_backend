@@ -4,14 +4,9 @@ import com.shootdoori.match.coordination.domain.Match;
 import com.shootdoori.match.coordination.domain.MatchApplication;
 import com.shootdoori.match.coordination.domain.MatchApplicationStatus;
 import com.shootdoori.match.coordination.repository.MatchApplicationRepository;
-import com.shootdoori.match.dto.MatchConfirmedResponseDto;
 import com.shootdoori.match.dto.MatchRequestRequestDto;
 import com.shootdoori.match.dto.MatchRequestResponseDto;
-import com.shootdoori.match.exception.common.DuplicatedException;
-import com.shootdoori.match.exception.common.ErrorCode;
-import com.shootdoori.match.exception.common.NoPermissionException;
-import com.shootdoori.match.exception.common.NotFoundException;
-import java.time.LocalDateTime;
+import com.shootdoori.match.team.service.TeamMemberQueryService;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,23 +15,25 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MatchApplicationCommandService {
 
+    private final TeamMemberQueryService teamMemberQueryService;
     private final MatchQueryService matchQueryService;
     private final MatchApplicationQueryService matchApplicationQueryService;
     private final MatchApplicationRepository matchApplicationRepository;
 
     public MatchApplicationCommandService(
-        MatchQueryService matchQueryService,
+        TeamMemberQueryService teamMemberQueryService, MatchQueryService matchQueryService,
         MatchApplicationQueryService matchApplicationQueryService,
         MatchApplicationRepository matchApplicationRepository
     ) {
+        this.teamMemberQueryService = teamMemberQueryService;
         this.matchQueryService = matchQueryService;
         this.matchApplicationQueryService = matchApplicationQueryService;
         this.matchApplicationRepository = matchApplicationRepository;
     }
 
-    public MatchRequestResponseDto apply(Long requestTeamId, Long waitingId,
+    public MatchRequestResponseDto apply(Long loginUserId, Long waitingId,
         MatchRequestRequestDto requestDto) {
-
+        Long requestTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
         Match waiting = matchQueryService.findById(waitingId);
 
         waiting.validateNotApplyingToOwnTeam(requestTeamId);
@@ -47,6 +44,18 @@ public class MatchApplicationCommandService {
         MatchApplication saved = matchApplicationRepository.save(matchApplication);
 
         return MatchRequestResponseDto.from(saved, waiting);
+    }
+
+    public MatchRequestResponseDto reject(Long loginUserId, Long requestId) {
+        Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
+        MatchApplication application = matchApplicationQueryService.findByIdForEntity(requestId);
+
+        Match waiting = matchQueryService.findById(application.getMatchId());
+        waiting.validateHomeTeam(loginTeamId);
+
+        application.reject(loginTeamId);
+
+        return MatchRequestResponseDto.from(application, waiting);
     }
 
     public void rejectAllPending(Long matchId, Long processorTeamId) {

@@ -66,7 +66,8 @@ public class MatchApplicationController {
         @LoginUser Long loginUserId,
         @PathVariable Long requestId
     ) {
-        return null;
+        return new ResponseEntity<>(matchApplicationCommandService.reject(loginUserId,
+            requestId), HttpStatus.OK);
     }
 
     @GetMapping("/waiting")

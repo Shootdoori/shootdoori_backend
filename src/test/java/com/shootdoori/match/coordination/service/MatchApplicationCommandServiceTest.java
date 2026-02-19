@@ -16,6 +16,7 @@ import com.shootdoori.match.dto.MatchRequestRequestDto;
 import com.shootdoori.match.dto.MatchRequestResponseDto;
 import com.shootdoori.match.exception.common.DuplicatedException;
 import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.team.service.TeamMemberQueryService;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +28,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class MatchApplicationCommandServiceTest {
 
+    @Mock
+    private TeamMemberQueryService teamMemberQueryService;
     @Mock
     private MatchQueryService matchQueryService;
     @Mock
@@ -41,6 +44,7 @@ class MatchApplicationCommandServiceTest {
     @BeforeEach
     void setUp() {
         matchApplicationCommandService = new MatchApplicationCommandService(
+            teamMemberQueryService,
             matchQueryService,
             matchApplicationQueryService,
             matchApplicationRepository
