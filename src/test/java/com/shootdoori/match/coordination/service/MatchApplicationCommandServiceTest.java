@@ -55,11 +55,13 @@ class MatchApplicationCommandServiceTest {
     @DisplayName("매치 신청 성공 시 요청 정보가 저장되고 응답 DTO가 반환된다")
     void apply_success() {
         // given
+        Long loginUserId = 1L;
         Long requestTeamId = 10L;
         Long waitingId = 20L;
         MatchRequestRequestDto dto = new MatchRequestRequestDto("요청", 30L);
 
         MatchApplication saved = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
         given(matchQueryService.findById(waitingId)).willReturn(waiting);
         given(matchApplicationRepository.save(any(MatchApplication.class))).willReturn(saved);
         given(saved.getId()).willReturn(1L);
@@ -70,7 +72,7 @@ class MatchApplicationCommandServiceTest {
 
         // when
         MatchRequestResponseDto response = matchApplicationCommandService.apply(
-            requestTeamId, waitingId, dto);
+            loginUserId, waitingId, dto);
 
         // then
         assertThat(response.requestId()).isEqualTo(1L);
@@ -82,17 +84,19 @@ class MatchApplicationCommandServiceTest {
     @DisplayName("자기 팀에 신청하면 예외가 발생한다")
     void apply_fail_when_applying_to_own_team() {
         // given
+        Long loginUserId = 1L;
         Long requestTeamId = 10L;
         Long waitingId = 20L;
         MatchRequestRequestDto dto = new MatchRequestRequestDto("요청", 30L);
 
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
         given(matchQueryService.findById(waitingId)).willReturn(waiting);
         doThrow(new IllegalStateException("자기 팀에는 매치 신청할 수 없습니다."))
             .when(waiting).validateNotApplyingToOwnTeam(requestTeamId);
 
         // when & then
         assertThatThrownBy(() ->
-            matchApplicationCommandService.apply(requestTeamId, waitingId, dto))
+            matchApplicationCommandService.apply(loginUserId, waitingId, dto))
             .isInstanceOf(IllegalStateException.class);
     }
 
@@ -100,17 +104,19 @@ class MatchApplicationCommandServiceTest {
     @DisplayName("중복 신청이면 예외가 발생한다")
     void apply_fail_when_duplicate() {
         // given
+        Long loginUserId = 1L;
         Long requestTeamId = 10L;
         Long waitingId = 20L;
         MatchRequestRequestDto dto = new MatchRequestRequestDto("요청", 30L);
 
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
         given(matchQueryService.findById(waitingId)).willReturn(waiting);
         doThrow(new DuplicatedException(ErrorCode.ALREADY_MATCH_REQUEST))
             .when(matchApplicationQueryService).checkDuplicate(waitingId, requestTeamId);
 
         // when & then
         assertThatThrownBy(() ->
-            matchApplicationCommandService.apply(requestTeamId, waitingId, dto))
+            matchApplicationCommandService.apply(loginUserId, waitingId, dto))
             .isInstanceOf(DuplicatedException.class);
     }
 
