@@ -55,7 +55,8 @@ public class MatchApplicationController {
         @LoginUser Long loginUserId,
         @PathVariable Long requestId
     ) {
-        return null;
+        return new ResponseEntity<>(matchApplicationCommandService.accept(loginUserId,
+            requestId), HttpStatus.OK);
     }
 
     @PutMapping("/requests/{requestId}/reject")

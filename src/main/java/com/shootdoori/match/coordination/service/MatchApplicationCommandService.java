@@ -4,9 +4,11 @@ import com.shootdoori.match.coordination.domain.Match;
 import com.shootdoori.match.coordination.domain.MatchApplication;
 import com.shootdoori.match.coordination.domain.MatchApplicationStatus;
 import com.shootdoori.match.coordination.repository.MatchApplicationRepository;
+import com.shootdoori.match.dto.MatchConfirmedResponseDto;
 import com.shootdoori.match.dto.MatchRequestRequestDto;
 import com.shootdoori.match.dto.MatchRequestResponseDto;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,23 @@ public class MatchApplicationCommandService {
         MatchApplication saved = matchApplicationRepository.save(matchApplication);
 
         return MatchRequestResponseDto.from(saved, waiting);
+    }
+
+    public MatchConfirmedResponseDto accept(Long loginUserId, Long requestId) {
+        Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
+        MatchApplication accepted = matchApplicationQueryService.findByIdForEntity(requestId);
+
+        Match waiting = matchQueryService.findById(accepted.getMatchId());
+        waiting.validateHomeTeam(loginTeamId);
+
+        accepted.accept(loginTeamId);
+        rejectAllPending(waiting.getId(), loginTeamId);
+
+        LocalDateTime confirmedAt = waiting.getPreferredDate()
+            .atTime(waiting.getPreferredTimeStart());
+        waiting.match(accepted.getRequestTeamId(), accepted.getLineupId(), confirmedAt);
+
+        return MatchConfirmedResponseDto.from(waiting);
     }
 
     public MatchRequestResponseDto reject(Long loginUserId, Long requestId) {

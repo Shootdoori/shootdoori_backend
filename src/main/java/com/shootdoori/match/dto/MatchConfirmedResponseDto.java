@@ -1,5 +1,6 @@
 package com.shootdoori.match.dto;
 
+import com.shootdoori.match.coordination.domain.Match;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -13,4 +14,16 @@ public record MatchConfirmedResponseDto(
     Long lineup1Id,
     Long lineup2Id
 ) {
+    public static MatchConfirmedResponseDto from(Match match) {
+        return new MatchConfirmedResponseDto(
+            match.getId(),
+            match.getHomeTeamId(),
+            match.getAwayTeamId(),
+            match.getPreferredDate(),
+            match.getPreferredTimeStart(),
+            match.getVenueId(),
+            match.getHomeLineupId(),
+            match.getAwayLineupId()
+        );
+    }
 }
