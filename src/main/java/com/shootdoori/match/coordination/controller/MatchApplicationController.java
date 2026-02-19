@@ -3,8 +3,8 @@ package com.shootdoori.match.coordination.controller;
 import com.shootdoori.match.coordination.service.MatchApplicationCommandService;
 import com.shootdoori.match.dto.MatchConfirmedResponseDto;
 import com.shootdoori.match.dto.MatchRequestHistoryResponseDto;
-import com.shootdoori.match.dto.MatchRequestRequestDto;
-import com.shootdoori.match.dto.MatchRequestResponseDto;
+import com.shootdoori.match.dto.MatchApplicationRequestDto;
+import com.shootdoori.match.dto.MatchApplicationResponseDto;
 import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
@@ -40,10 +40,10 @@ public class MatchApplicationController {
     }
 
     @PostMapping("/{waitingId}/request")
-    public ResponseEntity<MatchRequestResponseDto> apply(
+    public ResponseEntity<MatchApplicationResponseDto> apply(
         @LoginUser Long loginUserId,
         @PathVariable Long waitingId,
-        @RequestBody MatchRequestRequestDto requestDto
+        @RequestBody MatchApplicationRequestDto requestDto
     ) {
         return new ResponseEntity<>(
             matchApplicationCommandService.apply(loginUserId, waitingId, requestDto),
@@ -60,7 +60,7 @@ public class MatchApplicationController {
     }
 
     @PutMapping("/requests/{requestId}/reject")
-    public ResponseEntity<MatchRequestResponseDto> reject(
+    public ResponseEntity<MatchApplicationResponseDto> reject(
         @LoginUser Long loginUserId,
         @PathVariable Long requestId
     ) {
@@ -79,7 +79,7 @@ public class MatchApplicationController {
     }
 
     @GetMapping("/receive/me/pending")
-    public ResponseEntity<Slice<MatchRequestResponseDto>> findReceivedPendingRequests(
+    public ResponseEntity<Slice<MatchApplicationResponseDto>> findReceivedPendingRequests(
         @LoginUser Long loginUserId,
         @PageableDefault(sort = "requestAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
@@ -95,7 +95,7 @@ public class MatchApplicationController {
     }
 
     @DeleteMapping("/requests/{requestId}")
-    public ResponseEntity<MatchRequestResponseDto> cancel(
+    public ResponseEntity<MatchApplicationResponseDto> cancel(
         @LoginUser Long loginUserId,
         @PathVariable Long requestId
     ) {

@@ -12,9 +12,9 @@ import com.shootdoori.match.coordination.domain.Match;
 import com.shootdoori.match.coordination.domain.MatchApplication;
 import com.shootdoori.match.coordination.domain.MatchApplicationStatus;
 import com.shootdoori.match.coordination.repository.MatchApplicationRepository;
+import com.shootdoori.match.dto.MatchApplicationRequestDto;
+import com.shootdoori.match.dto.MatchApplicationResponseDto;
 import com.shootdoori.match.dto.MatchConfirmedResponseDto;
-import com.shootdoori.match.dto.MatchRequestRequestDto;
-import com.shootdoori.match.dto.MatchRequestResponseDto;
 import com.shootdoori.match.exception.common.DuplicatedException;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NoPermissionException;
@@ -63,7 +63,7 @@ class MatchApplicationCommandServiceTest {
         Long loginUserId = 1L;
         Long requestTeamId = 10L;
         Long waitingId = 20L;
-        MatchRequestRequestDto dto = new MatchRequestRequestDto("요청", 30L);
+        MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
 
         MatchApplication saved = mock(MatchApplication.class);
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
@@ -76,8 +76,7 @@ class MatchApplicationCommandServiceTest {
         given(waiting.getHomeTeamId()).willReturn(999L);
 
         // when
-        MatchRequestResponseDto response = matchApplicationCommandService.apply(loginUserId,
-            waitingId, dto);
+        MatchApplicationResponseDto response = matchApplicationCommandService.apply(loginUserId, waitingId, dto);
 
         // then
         assertThat(response.requestId()).isEqualTo(1L);
@@ -92,7 +91,7 @@ class MatchApplicationCommandServiceTest {
         Long loginUserId = 1L;
         Long requestTeamId = 10L;
         Long waitingId = 20L;
-        MatchRequestRequestDto dto = new MatchRequestRequestDto("요청", 30L);
+        MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
 
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
         given(matchQueryService.findById(waitingId)).willReturn(waiting);
@@ -111,7 +110,7 @@ class MatchApplicationCommandServiceTest {
         Long loginUserId = 1L;
         Long requestTeamId = 10L;
         Long waitingId = 20L;
-        MatchRequestRequestDto dto = new MatchRequestRequestDto("요청", 30L);
+        MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
 
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
         given(matchQueryService.findById(waitingId)).willReturn(waiting);
@@ -157,8 +156,7 @@ class MatchApplicationCommandServiceTest {
             MatchApplicationStatus.PENDING)).willReturn(List.of(pending1, pending2));
 
         // when
-        MatchConfirmedResponseDto response = matchApplicationCommandService.accept(loginUserId,
-            requestId);
+        MatchConfirmedResponseDto response = matchApplicationCommandService.accept(loginUserId, requestId);
 
         // then
         verify(pending1).reject(loginTeamId);
@@ -212,8 +210,7 @@ class MatchApplicationCommandServiceTest {
         given(waiting.getHomeTeamId()).willReturn(loginTeamId);
 
         // when & then
-        MatchRequestResponseDto response = matchApplicationCommandService.reject(loginUserId,
-            requestId);
+        MatchApplicationResponseDto response = matchApplicationCommandService.reject(loginUserId, requestId);
         verify(waiting).validateHomeTeam(loginTeamId);
         verify(application).reject(loginTeamId);
         assertThat(response.requestId()).isEqualTo(requestId);
@@ -262,8 +259,7 @@ class MatchApplicationCommandServiceTest {
         given(waiting.getHomeTeamId()).willReturn(30L);
 
         // when & then
-        MatchRequestResponseDto response = matchApplicationCommandService.cancel(loginUserId,
-            requestId);
+        MatchApplicationResponseDto response = matchApplicationCommandService.cancel(loginUserId, requestId);
         verify(application).cancel(loginTeamId);
         assertThat(response.requestId()).isEqualTo(requestId);
     }

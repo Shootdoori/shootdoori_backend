@@ -3,7 +3,7 @@ package com.shootdoori.match.dto;
 import com.shootdoori.match.coordination.domain.Match;
 import com.shootdoori.match.coordination.domain.MatchApplication;
 
-public record MatchRequestResponseDto(
+public record MatchApplicationResponseDto(
     Long requestId,
     Long requestTeamId,
     Long targetTeamId,
@@ -11,8 +11,8 @@ public record MatchRequestResponseDto(
     Long requestTeamLineupId
 ) {
 
-    public static MatchRequestResponseDto from(MatchApplication matchApplication, Match match) {
-        return new MatchRequestResponseDto(
+    public static MatchApplicationResponseDto from(MatchApplication matchApplication, Match match) {
+        return new MatchApplicationResponseDto(
             matchApplication.getId(),
             matchApplication.getRequestTeamId(),
             match.getHomeTeamId(),

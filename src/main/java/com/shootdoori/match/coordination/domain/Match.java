@@ -202,4 +202,3 @@ public class Match {
         return timeStamp.getUpdatedAt();
     }
 }
-

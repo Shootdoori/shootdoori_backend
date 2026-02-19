@@ -5,8 +5,8 @@ import com.shootdoori.match.coordination.domain.MatchApplication;
 import com.shootdoori.match.coordination.domain.MatchApplicationStatus;
 import com.shootdoori.match.coordination.repository.MatchApplicationRepository;
 import com.shootdoori.match.dto.MatchConfirmedResponseDto;
-import com.shootdoori.match.dto.MatchRequestRequestDto;
-import com.shootdoori.match.dto.MatchRequestResponseDto;
+import com.shootdoori.match.dto.MatchApplicationRequestDto;
+import com.shootdoori.match.dto.MatchApplicationResponseDto;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,8 +33,8 @@ public class MatchApplicationCommandService {
         this.matchApplicationRepository = matchApplicationRepository;
     }
 
-    public MatchRequestResponseDto apply(Long loginUserId, Long waitingId,
-        MatchRequestRequestDto requestDto) {
+    public MatchApplicationResponseDto apply(Long loginUserId, Long waitingId,
+        MatchApplicationRequestDto requestDto) {
         Long requestTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
         Match waiting = matchQueryService.findById(waitingId);
 
@@ -45,7 +45,7 @@ public class MatchApplicationCommandService {
             requestDto.requestMessage());
         MatchApplication saved = matchApplicationRepository.save(matchApplication);
 
-        return MatchRequestResponseDto.from(saved, waiting);
+        return MatchApplicationResponseDto.from(saved, waiting);
     }
 
     public MatchConfirmedResponseDto accept(Long loginUserId, Long requestId) {
@@ -65,7 +65,7 @@ public class MatchApplicationCommandService {
         return MatchConfirmedResponseDto.from(waiting);
     }
 
-    public MatchRequestResponseDto reject(Long loginUserId, Long requestId) {
+    public MatchApplicationResponseDto reject(Long loginUserId, Long requestId) {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
         MatchApplication application = matchApplicationQueryService.findByIdForEntity(requestId);
 
@@ -74,10 +74,10 @@ public class MatchApplicationCommandService {
 
         application.reject(loginTeamId);
 
-        return MatchRequestResponseDto.from(application, waiting);
+        return MatchApplicationResponseDto.from(application, waiting);
     }
 
-    public MatchRequestResponseDto cancel(Long loginUserId, Long requestId) {
+    public MatchApplicationResponseDto cancel(Long loginUserId, Long requestId) {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
         MatchApplication application = matchApplicationQueryService.findByIdForEntity(requestId);
 
@@ -85,7 +85,7 @@ public class MatchApplicationCommandService {
 
         Match waiting = matchQueryService.findById(application.getMatchId());
 
-        return MatchRequestResponseDto.from(application, waiting);
+        return MatchApplicationResponseDto.from(application, waiting);
     }
 
     public void rejectAllPending(Long matchId, Long processorTeamId) {
