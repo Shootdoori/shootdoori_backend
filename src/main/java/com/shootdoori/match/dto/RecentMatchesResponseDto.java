@@ -1,37 +1,37 @@
 package com.shootdoori.match.dto;
 
+import com.shootdoori.match.coordination.domain.Match;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public record RecentMatchesResponseDto(
     Long matchId,
-    Long createTeamId,
-    Long requestTeamId,
-    Long lineup1Id,
-    Long lineup2Id,
-    String createTeamName,
-    String requestTeamName,
+    Long homeTeamId,
+    Long awayTeamId,
+    Long homeLineupId,
+    Long awayLineupId,
     LocalDate matchDate,
     LocalTime matchTime,
-    String venueName,
+    Long venueId,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    public static RecentMatchesResponseDto from(MatchSummaryProjection matchSummaryProjection) {
+
+    public static RecentMatchesResponseDto from(Match match) {
+        LocalDateTime matchAt = match.getMatchAt();
+
         return new RecentMatchesResponseDto(
-            matchSummaryProjection.matchId(),
-            matchSummaryProjection.createTeamId(),
-            matchSummaryProjection.requestTeamId(),
-            matchSummaryProjection.createTeamLineupId(),
-            matchSummaryProjection.requestTeamLineupId(),
-            matchSummaryProjection.createTeamName(),
-            matchSummaryProjection.requestTeamName(),
-            matchSummaryProjection.matchDate(),
-            matchSummaryProjection.matchTime(),
-            matchSummaryProjection.venueName(),
-            matchSummaryProjection.createdAt(),
-            matchSummaryProjection.updatedAt()
+            match.getId(),
+            match.getHomeTeamId(),
+            match.getAwayTeamId(),
+            match.getHomeLineupId(),
+            match.getAwayLineupId(),
+            matchAt.toLocalDate(),
+            matchAt.toLocalTime(),
+            match.getVenueId(),
+            match.getCreatedAt(),
+            match.getUpdatedAt()
         );
     }
 }

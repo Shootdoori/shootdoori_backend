@@ -1,5 +1,6 @@
 package com.shootdoori.match.dto;
 
+import com.shootdoori.match.coordination.domain.Match;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -16,4 +17,19 @@ public record MatchWaitingResponseDto(
     LocalDateTime expiresAt,
     Long lineup1Id
 ) {
+
+    public static MatchWaitingResponseDto from(Match match) {
+        return new MatchWaitingResponseDto(
+            match.getId(),
+            match.getHomeTeamId(),
+            match.getPreferredDate(),
+            match.getPreferredTimeStart(),
+            match.getPreferredTimeEnd(),
+            match.getVenueId(),
+            match.isUniversityOnly(),
+            match.getMessage(),
+            match.getExpiresAt(),
+            match.getHomeLineupId()
+        );
+    }
 }

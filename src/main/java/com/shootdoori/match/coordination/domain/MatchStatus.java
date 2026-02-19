@@ -32,6 +32,12 @@ public enum MatchStatus {
         }
     }
 
+    public void validateWaitingStatus() {
+        if (this != WAITING) {
+            throw new IllegalStateException("매치 대기 상태가 아닙니다.");
+        }
+    }
+
     private boolean canMatch() {
         return this == WAITING;
     }

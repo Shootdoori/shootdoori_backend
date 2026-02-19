@@ -1,13 +1,14 @@
 package com.shootdoori.match.coordination.controller;
 
 import com.shootdoori.match.coordination.service.MatchCommandService;
+import com.shootdoori.match.coordination.service.EnemyTeamQueryService;
+import com.shootdoori.match.coordination.service.MatchQueryService;
 import com.shootdoori.match.dto.EnemyTeamResponseDto;
 import com.shootdoori.match.dto.MatchCreateRequestDto;
 import com.shootdoori.match.dto.MatchCreateResponseDto;
 import com.shootdoori.match.dto.MatchWaitingCancelResponseDto;
 import com.shootdoori.match.dto.MatchWaitingResponseDto;
 import com.shootdoori.match.resolver.LoginUser;
-import com.shootdoori.match.team.service.TeamMemberQueryService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -26,13 +27,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/matches")
 public class MatchController {
 
+    private final MatchQueryService matchQueryService;
     private final MatchCommandService matchCommandService;
-    private final TeamMemberQueryService teamMemberQueryService;
-
-    public MatchController(MatchCommandService matchCommandService,
-        TeamMemberQueryService teamMemberQueryService) {
+    private final EnemyTeamQueryService enemyTeamQueryService;
+    public MatchController(
+        MatchQueryService matchQueryService,
+        MatchCommandService matchCommandService,
+        EnemyTeamQueryService enemyTeamQueryService
+    ) {
+        this.matchQueryService = matchQueryService;
         this.matchCommandService = matchCommandService;
-        this.teamMemberQueryService = teamMemberQueryService;
+        this.enemyTeamQueryService = enemyTeamQueryService;
     }
 
     @PostMapping
@@ -40,11 +45,8 @@ public class MatchController {
         @LoginUser Long loginUserId,
         @RequestBody MatchCreateRequestDto matchCreateRequestDto
     ) {
-        Long homeTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
-        MatchCreateResponseDto responseDto = matchCommandService.create(homeTeamId,
-            matchCreateRequestDto);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(matchCommandService.create(loginUserId, matchCreateRequestDto),
+            HttpStatus.CREATED);
     }
 
     @PutMapping("/waiting/{matchWaitingId}/cancel")
@@ -52,15 +54,16 @@ public class MatchController {
         @LoginUser Long loginUserId,
         @PathVariable Long matchWaitingId
     ) {
-        return null;
+        return new ResponseEntity<>(matchCommandService.cancel(loginUserId, matchWaitingId),
+            HttpStatus.OK);
     }
 
     @GetMapping("/waiting/me")
     public ResponseEntity<Slice<MatchWaitingResponseDto>> findAll(
         @LoginUser Long loginUserId,
-        @PageableDefault(sort = "audit.createdAt", direction = Sort.Direction.DESC) Pageable pageable
+        @PageableDefault(sort = "timeStamp.createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        return null;
+        return new ResponseEntity<>(matchQueryService.findAll(loginUserId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{matchId}/enemyTeam")
@@ -68,6 +71,7 @@ public class MatchController {
         @LoginUser Long loginUserId,
         @PathVariable Long matchId
     ) {
-        return null;
+        return new ResponseEntity<>(enemyTeamQueryService.findEnemyTeam(loginUserId, matchId),
+            HttpStatus.OK);
     }
 }
