@@ -36,7 +36,7 @@ public class MatchApplicationCommandService {
     public MatchApplicationResponseDto apply(Long loginUserId, Long waitingId,
         MatchApplicationRequestDto requestDto) {
         Long requestTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
-        Match waiting = matchQueryService.findById(waitingId);
+        Match waiting = matchQueryService.findWaitingById(waitingId);
 
         waiting.validateNotApplyingToOwnTeam(requestTeamId);
         matchApplicationQueryService.checkDuplicate(waitingId, requestTeamId);
@@ -52,7 +52,7 @@ public class MatchApplicationCommandService {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
         MatchApplication accepted = matchApplicationQueryService.findByIdForEntity(requestId);
 
-        Match waiting = matchQueryService.findById(accepted.getMatchId());
+        Match waiting = matchQueryService.findWaitingById(accepted.getMatchId());
         waiting.validateHomeTeam(loginTeamId);
 
         accepted.accept(loginTeamId);
@@ -69,7 +69,7 @@ public class MatchApplicationCommandService {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
         MatchApplication application = matchApplicationQueryService.findByIdForEntity(requestId);
 
-        Match waiting = matchQueryService.findById(application.getMatchId());
+        Match waiting = matchQueryService.findWaitingById(application.getMatchId());
         waiting.validateHomeTeam(loginTeamId);
 
         application.reject(loginTeamId);
@@ -83,7 +83,7 @@ public class MatchApplicationCommandService {
 
         application.cancel(loginTeamId);
 
-        Match waiting = matchQueryService.findById(application.getMatchId());
+        Match waiting = matchQueryService.findWaitingById(application.getMatchId());
 
         return MatchApplicationResponseDto.from(application, waiting);
     }
