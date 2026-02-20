@@ -1,0 +1,306 @@
+package com.shootdoori.match.coordination.service;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
+import com.shootdoori.match.coordination.domain.Match;
+import com.shootdoori.match.coordination.domain.MatchApplication;
+import com.shootdoori.match.coordination.domain.MatchApplicationStatus;
+import com.shootdoori.match.coordination.repository.MatchApplicationRepository;
+import com.shootdoori.match.dto.MatchApplicationRequestDto;
+import com.shootdoori.match.dto.MatchApplicationResponseDto;
+import com.shootdoori.match.dto.MatchConfirmedResponseDto;
+import com.shootdoori.match.exception.common.DuplicatedException;
+import com.shootdoori.match.exception.common.ErrorCode;
+import com.shootdoori.match.exception.common.NoPermissionException;
+import com.shootdoori.match.team.service.TeamMemberQueryService;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
+@ExtendWith(MockitoExtension.class)
+class MatchApplicationCommandServiceTest {
+
+    @Mock
+    private TeamMemberQueryService teamMemberQueryService;
+    @Mock
+    private MatchQueryService matchQueryService;
+    @Mock
+    private MatchApplicationQueryService matchApplicationQueryService;
+    @Mock
+    private MatchApplicationRepository matchApplicationRepository;
+    @Mock
+    private Match waiting;
+
+    private MatchApplicationCommandService matchApplicationCommandService;
+
+    @BeforeEach
+    void setUp() {
+        matchApplicationCommandService = new MatchApplicationCommandService(
+            teamMemberQueryService,
+            matchQueryService,
+            matchApplicationQueryService,
+            matchApplicationRepository
+        );
+    }
+
+    @Test
+    @DisplayName("매치 신청 성공 시 요청 정보가 저장되고 응답 DTO가 반환된다")
+    void apply_success() {
+        // given
+        Long loginUserId = 1L;
+        Long requestTeamId = 10L;
+        Long waitingId = 20L;
+        MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
+
+        MatchApplication saved = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchApplicationRepository.save(any(MatchApplication.class))).willReturn(saved);
+        given(saved.getId()).willReturn(1L);
+        given(saved.getRequestTeamId()).willReturn(requestTeamId);
+        given(saved.getRequestMessage()).willReturn("요청");
+        given(saved.getLineupId()).willReturn(30L);
+        given(waiting.getHomeTeamId()).willReturn(999L);
+
+        // when
+        MatchApplicationResponseDto response = matchApplicationCommandService.apply(loginUserId, waitingId, dto);
+
+        // then
+        assertThat(response.requestId()).isEqualTo(1L);
+        assertThat(response.requestTeamId()).isEqualTo(requestTeamId);
+        assertThat(response.targetTeamId()).isEqualTo(999L);
+    }
+
+    @Test
+    @DisplayName("자기 팀에 신청하면 예외가 발생한다")
+    void apply_fail_when_applying_to_own_team() {
+        // given
+        Long loginUserId = 1L;
+        Long requestTeamId = 10L;
+        Long waitingId = 20L;
+        MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
+
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        doThrow(new IllegalStateException("자기 팀에는 매치 신청할 수 없습니다."))
+            .when(waiting).validateNotApplyingToOwnTeam(requestTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.apply(loginUserId, waitingId, dto))
+            .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    @DisplayName("중복 신청이면 예외가 발생한다")
+    void apply_fail_when_duplicate() {
+        // given
+        Long loginUserId = 1L;
+        Long requestTeamId = 10L;
+        Long waitingId = 20L;
+        MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
+
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        doThrow(new DuplicatedException(ErrorCode.ALREADY_MATCH_REQUEST))
+            .when(matchApplicationQueryService).checkDuplicate(waitingId, requestTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.apply(loginUserId, waitingId, dto))
+            .isInstanceOf(DuplicatedException.class);
+    }
+
+    @Test
+    @DisplayName("매치 신청 수락 성공 시 확정 정보가 반환되고 나머지 pending 신청은 거절된다")
+    void accept_success() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication accepted = new MatchApplication(waitingId, 30L, 7L, "요청");
+        ReflectionTestUtils.setField(accepted, "id", requestId);
+
+        Match realWaiting = new Match(
+            loginTeamId,
+            LocalDate.of(2026, 3, 20),
+            LocalTime.of(14, 0),
+            LocalTime.of(16, 0),
+            5L,
+            true,
+            "매치 요청",
+            11L
+        );
+        ReflectionTestUtils.setField(realWaiting, "id", waitingId);
+
+        MatchApplication pending1 = mock(MatchApplication.class);
+        MatchApplication pending2 = mock(MatchApplication.class);
+
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(accepted);
+        given(matchQueryService.findById(waitingId)).willReturn(realWaiting);
+        given(matchApplicationRepository.findAllByMatchIdAndStatus(waitingId,
+            MatchApplicationStatus.PENDING)).willReturn(List.of(pending1, pending2));
+
+        // when
+        MatchConfirmedResponseDto response = matchApplicationCommandService.accept(loginUserId, requestId);
+
+        // then
+        verify(pending1).reject(loginTeamId);
+        verify(pending2).reject(loginTeamId);
+        assertThat(response.matchId()).isEqualTo(waitingId);
+        assertThat(response.team1Id()).isEqualTo(loginTeamId);
+        assertThat(response.team2Id()).isEqualTo(accepted.getRequestTeamId());
+        assertThat(response.lineup2Id()).isEqualTo(accepted.getLineupId());
+    }
+
+    @Test
+    @DisplayName("홈팀이 아니면 매치 신청 수락 시 권한 예외가 발생한다")
+    void accept_fail_when_not_home_team() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication accepted = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(accepted);
+        given(accepted.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        doThrow(new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED))
+            .when(waiting).validateHomeTeam(loginTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.accept(loginUserId, requestId))
+            .isInstanceOf(NoPermissionException.class);
+    }
+
+    @Test
+    @DisplayName("매치 신청 거절 성공 시 거절 처리 후 응답 DTO를 반환한다")
+    void reject_success() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        given(application.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(application.getId()).willReturn(requestId);
+        given(application.getRequestTeamId()).willReturn(30L);
+        given(application.getRequestMessage()).willReturn("요청");
+        given(application.getLineupId()).willReturn(7L);
+        given(waiting.getHomeTeamId()).willReturn(loginTeamId);
+
+        // when & then
+        MatchApplicationResponseDto response = matchApplicationCommandService.reject(loginUserId, requestId);
+        verify(waiting).validateHomeTeam(loginTeamId);
+        verify(application).reject(loginTeamId);
+        assertThat(response.requestId()).isEqualTo(requestId);
+    }
+
+    @Test
+    @DisplayName("홈팀이 아니면 매치 신청 거절 시 권한 예외가 발생한다")
+    void reject_fail_when_not_home_team() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        given(application.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        doThrow(new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED))
+            .when(waiting).validateHomeTeam(loginTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.reject(loginUserId, requestId))
+            .isInstanceOf(NoPermissionException.class);
+    }
+
+    @Test
+    @DisplayName("매치 신청 취소 성공 시 취소 처리 후 응답 DTO를 반환한다")
+    void cancel_success() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+        Long waitingId = 20L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        given(application.getMatchId()).willReturn(waitingId);
+        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(application.getId()).willReturn(requestId);
+        given(application.getRequestTeamId()).willReturn(loginTeamId);
+        given(application.getRequestMessage()).willReturn("요청");
+        given(application.getLineupId()).willReturn(7L);
+        given(waiting.getHomeTeamId()).willReturn(30L);
+
+        // when & then
+        MatchApplicationResponseDto response = matchApplicationCommandService.cancel(loginUserId, requestId);
+        verify(application).cancel(loginTeamId);
+        assertThat(response.requestId()).isEqualTo(requestId);
+    }
+
+    @Test
+    @DisplayName("요청 팀이 아니면 매치 신청 취소 시 권한 예외가 발생한다")
+    void cancel_fail_when_not_request_team() {
+        // given
+        Long loginUserId = 1L;
+        Long loginTeamId = 10L;
+        Long requestId = 100L;
+
+        MatchApplication application = mock(MatchApplication.class);
+        given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
+        given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
+        doThrow(new NoPermissionException(ErrorCode.MATCH_REQUEST_OWNERSHIP_VIOLATION))
+            .when(application).cancel(loginTeamId);
+
+        // when & then
+        assertThatThrownBy(() -> matchApplicationCommandService.cancel(loginUserId, requestId))
+            .isInstanceOf(NoPermissionException.class);
+    }
+
+    @Test
+    @DisplayName("모든 PENDING(대기중) 신청을 거절 처리한다")
+    void rejectAllPending_success() {
+        // given
+        Long matchId = 100L;
+        Long processorTeamId = 200L;
+
+        MatchApplication pending1 = mock(MatchApplication.class);
+        MatchApplication pending2 = mock(MatchApplication.class);
+
+        given(matchApplicationRepository.findAllByMatchIdAndStatus(matchId,
+            MatchApplicationStatus.PENDING)).willReturn(List.of(pending1, pending2));
+
+        // when
+        matchApplicationCommandService.rejectAllPending(matchId, processorTeamId);
+
+        // then
+        verify(pending1).reject(processorTeamId);
+        verify(pending2).reject(processorTeamId);
+    }
+}

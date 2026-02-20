@@ -1,6 +1,6 @@
 package com.shootdoori.match.dto;
 
-public record MatchRequestRequestDto(
+public record MatchApplicationRequestDto(
     String requestMessage,
     Long lineupId
 ) {

@@ -53,6 +53,7 @@ class MatchCommandServiceTest {
     @Test
     @DisplayName("매치 조율을 생성하면 팀 정보를 변환해 저장하고 응답을 반환한다")
     void create_success() {
+        // given
         Long loginUserId = 10L;
         Long homeTeamId = 100L;
         Long venueId = 5L;
@@ -78,8 +79,8 @@ class MatchCommandServiceTest {
         Match saved = mock(Match.class);
         given(matchRepository.save(any(Match.class))).willReturn(saved);
 
+        // when & then
         MatchCreateResponseDto response = matchCommandService.create(loginUserId, requestDto);
-
         assertThat(response.teamId()).isEqualTo(homeTeamId);
         assertThat(response.venueId()).isEqualTo(venueId);
     }
@@ -87,6 +88,7 @@ class MatchCommandServiceTest {
     @Test
     @DisplayName("매치 조율을 취소하면 취소 처리 후 대기 중인 요청을 거절한다")
     void cancel_success() {
+        // given
         Long loginUserId = 10L;
         Long loginTeamId = 100L;
         Long waitingId = 1000L;
@@ -106,8 +108,8 @@ class MatchCommandServiceTest {
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
         given(matchQueryService.findById(waitingId)).willReturn(waiting);
 
+        // when & then
         MatchWaitingCancelResponseDto response = matchCommandService.cancel(loginUserId, waitingId);
-
         assertThat(response.waitingId()).isEqualTo(waitingId);
         assertThat(response.teamId()).isEqualTo(loginTeamId);
         assertThat(response.expiresAt()).isEqualTo(waiting.getExpiresAt());
