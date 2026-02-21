@@ -106,7 +106,7 @@ class MatchCommandServiceTest {
         ReflectionTestUtils.setField(waiting, "id", waitingId);
 
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
 
         // when & then
         MatchWaitingCancelResponseDto response = matchCommandService.cancel(loginUserId, waitingId);
