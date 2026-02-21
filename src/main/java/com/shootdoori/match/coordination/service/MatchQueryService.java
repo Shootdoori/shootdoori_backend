@@ -26,12 +26,17 @@ public class MatchQueryService {
         this.matchRepository = matchRepository;
     }
 
-    public Match findById(Long waitingId) {
+    public Match findWaitingById(Long waitingId) {
         Match waiting = matchRepository.findById(waitingId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.MATCH_WAITING_NOT_FOUND));
         waiting.validateWaitingStatus();
 
         return waiting;
+    }
+
+    public Match findByIdForEntity(Long matchId) {
+        return matchRepository.findById(matchId)
+            .orElseThrow(() -> new NotFoundException(ErrorCode.MATCH_WAITING_NOT_FOUND));
     }
 
     public Slice<MatchWaitingResponseDto> findAll(Long loginUserId, Pageable pageable) {

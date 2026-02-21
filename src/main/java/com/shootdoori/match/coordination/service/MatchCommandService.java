@@ -48,7 +48,7 @@ public class MatchCommandService {
     public MatchWaitingCancelResponseDto cancel(Long loginUserId, Long waitingId) {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
 
-        Match waiting = matchQueryService.findById(waitingId);
+        Match waiting = matchQueryService.findWaitingById(waitingId);
         waiting.validateHomeTeam(loginTeamId);
 
         waiting.cancel();

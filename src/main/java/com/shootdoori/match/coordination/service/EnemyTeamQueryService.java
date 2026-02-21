@@ -28,7 +28,7 @@ public class EnemyTeamQueryService {
     public EnemyTeamResponseDto findEnemyTeam(Long loginUserId, Long matchId) {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
 
-        Match match = matchQueryService.findById(matchId);
+        Match match = matchQueryService.findByIdForEntity(matchId);
 
         Long enemyTeamId = match.findEnemyTeamId(loginTeamId);
         Team enemyTeam = teamQueryService.findByIdForEntity(enemyTeamId);
