@@ -50,7 +50,7 @@ public class LineupCommandService {
     public List<LineupMemberResponseDto> update(Long loginUserId, Long lineupId,
         List<LineupMemberRequestDto> requestDtos) {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
-        Lineup lineup = findOwnedLineup(loginTeamId, lineupId);
+        Lineup lineup = findByIdForEntity(loginTeamId, lineupId);
 
         clearMembers(lineup);
         addMembers(lineup, loginTeamId, requestDtos);
@@ -61,7 +61,7 @@ public class LineupCommandService {
 
     public void delete(Long loginUserId, Long lineupId) {
         Long loginTeamId = teamMemberQueryService.getTeamIdByUserId(loginUserId);
-        Lineup lineup = findOwnedLineup(loginTeamId, lineupId);
+        Lineup lineup = findByIdForEntity(loginTeamId, lineupId);
         lineupRepository.delete(lineup);
     }
 
@@ -93,7 +93,7 @@ public class LineupCommandService {
     }
 
 
-    private Lineup findOwnedLineup(Long teamId, Long lineupId) {
+    private Lineup findByIdForEntity(Long teamId, Long lineupId) {
         return lineupRepository.findByIdAndTeamId(lineupId, teamId)
             .orElseThrow(() -> new NotFoundException(ErrorCode.LINEUP_NOT_FOUND));
     }
