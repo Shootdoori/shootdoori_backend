@@ -20,21 +20,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "lineup")
 public class Lineup {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @Column(name = "match_id", nullable = false)
     private Long matchId;
-
-    @Column(name = "team_id", nullable = false)
+    
+    @Column(name = "team_id", nullable = false) 
     private Long teamId;
-
+    
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true, optional = false)
     @JoinColumn(name = "lineup_members_id", nullable = false, unique = true)
     private LineupMembers members;
-
+    
     @Embedded
     private TimeStamp timeStamp = new TimeStamp();
 
@@ -75,5 +74,7 @@ public class Lineup {
         return matchId;
     }
 
-    public Long getTeamId() { return teamId; }
+    public Long getTeamId() { 
+        return teamId; 
+    }
 }
