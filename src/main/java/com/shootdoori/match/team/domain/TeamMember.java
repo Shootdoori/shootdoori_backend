@@ -15,6 +15,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
@@ -93,6 +95,12 @@ public class TeamMember {
 
     public void validateKickAuthority(TeamMember targetMember) {
         if (!role.canKick(targetMember.getRole())) {
+            throw new NoPermissionException(ErrorCode.NO_PERMISSION);
+        }
+    }
+
+    public void validateBelongsToTeam(Long expectedTeamId) {
+        if (!Objects.equals(this.team.getId(), expectedTeamId)) {
             throw new NoPermissionException(ErrorCode.NO_PERMISSION);
         }
     }
