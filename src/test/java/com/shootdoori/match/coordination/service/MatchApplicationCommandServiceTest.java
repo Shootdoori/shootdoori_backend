@@ -67,7 +67,7 @@ class MatchApplicationCommandServiceTest {
 
         MatchApplication saved = mock(MatchApplication.class);
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         given(matchApplicationRepository.save(any(MatchApplication.class))).willReturn(saved);
         given(saved.getId()).willReturn(1L);
         given(saved.getRequestTeamId()).willReturn(requestTeamId);
@@ -94,7 +94,7 @@ class MatchApplicationCommandServiceTest {
         MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
 
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         doThrow(new IllegalStateException("자기 팀에는 매치 신청할 수 없습니다."))
             .when(waiting).validateNotApplyingToOwnTeam(requestTeamId);
 
@@ -113,7 +113,7 @@ class MatchApplicationCommandServiceTest {
         MatchApplicationRequestDto dto = new MatchApplicationRequestDto("요청", 30L);
 
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(requestTeamId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         doThrow(new DuplicatedException(ErrorCode.ALREADY_MATCH_REQUEST))
             .when(matchApplicationQueryService).checkDuplicate(waitingId, requestTeamId);
 
@@ -151,7 +151,7 @@ class MatchApplicationCommandServiceTest {
 
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
         given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(accepted);
-        given(matchQueryService.findById(waitingId)).willReturn(realWaiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(realWaiting);
         given(matchApplicationRepository.findAllByMatchIdAndStatus(waitingId,
             MatchApplicationStatus.PENDING)).willReturn(List.of(pending1, pending2));
 
@@ -180,7 +180,7 @@ class MatchApplicationCommandServiceTest {
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
         given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(accepted);
         given(accepted.getMatchId()).willReturn(waitingId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         doThrow(new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED))
             .when(waiting).validateHomeTeam(loginTeamId);
 
@@ -202,7 +202,7 @@ class MatchApplicationCommandServiceTest {
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
         given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
         given(application.getMatchId()).willReturn(waitingId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         given(application.getId()).willReturn(requestId);
         given(application.getRequestTeamId()).willReturn(30L);
         given(application.getRequestMessage()).willReturn("요청");
@@ -229,7 +229,7 @@ class MatchApplicationCommandServiceTest {
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
         given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
         given(application.getMatchId()).willReturn(waitingId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         doThrow(new NoPermissionException(ErrorCode.MATCH_OPERATION_PERMISSION_DENIED))
             .when(waiting).validateHomeTeam(loginTeamId);
 
@@ -251,7 +251,7 @@ class MatchApplicationCommandServiceTest {
         given(teamMemberQueryService.getTeamIdByUserId(loginUserId)).willReturn(loginTeamId);
         given(matchApplicationQueryService.findByIdForEntity(requestId)).willReturn(application);
         given(application.getMatchId()).willReturn(waitingId);
-        given(matchQueryService.findById(waitingId)).willReturn(waiting);
+        given(matchQueryService.findWaitingById(waitingId)).willReturn(waiting);
         given(application.getId()).willReturn(requestId);
         given(application.getRequestTeamId()).willReturn(loginTeamId);
         given(application.getRequestMessage()).willReturn("요청");

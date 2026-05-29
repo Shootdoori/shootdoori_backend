@@ -1,8 +1,11 @@
 package com.shootdoori.match.coordination.domain;
 
 import com.shootdoori.match.entity.common.Position;
+import com.shootdoori.match.entity.common.TimeStamp;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
@@ -12,9 +15,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "lineup_member")
 public class LineupMember {
 
@@ -36,6 +42,9 @@ public class LineupMember {
     @Column(name = "is_starter", nullable = false)
     private boolean isStarter;
 
+    @Embedded
+    private TimeStamp timeStamp = new TimeStamp();
+
     protected LineupMember() {
     }
 
@@ -53,12 +62,24 @@ public class LineupMember {
         return teamMemberId;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public Position getPosition() {
         return position;
     }
 
     public boolean isStarter() {
         return isStarter;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return timeStamp.getCreatedAt();
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return timeStamp.getUpdatedAt();
     }
 
     public boolean isSameTeamMember(Long teamMemberId) {
