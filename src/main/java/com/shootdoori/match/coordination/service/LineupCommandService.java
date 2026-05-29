@@ -22,16 +22,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class LineupCommandService {
 
     private final TeamMemberQueryService teamMemberQueryService;
-    private final LineupQueryService lineupQueryService;
     private final LineupRepository lineupRepository;
     private final UserQueryService userQueryService;
 
     public LineupCommandService(
-        TeamMemberQueryService teamMemberQueryService, LineupQueryService lineupQueryService,
-        LineupRepository lineupRepository, UserQueryService userQueryService
+        TeamMemberQueryService teamMemberQueryService,
+        LineupRepository lineupRepository, 
+        UserQueryService userQueryService
     ) {
         this.teamMemberQueryService = teamMemberQueryService;
-        this.lineupQueryService = lineupQueryService;
         this.lineupRepository = lineupRepository;
         this.userQueryService = userQueryService;
     }

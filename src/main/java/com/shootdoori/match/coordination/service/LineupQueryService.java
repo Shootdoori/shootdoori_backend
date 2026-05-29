@@ -1,16 +1,12 @@
 package com.shootdoori.match.coordination.service;
 
 import com.shootdoori.match.coordination.domain.Lineup;
-import com.shootdoori.match.coordination.domain.LineupMember;
 import com.shootdoori.match.coordination.repository.LineupRepository;
 import com.shootdoori.match.dto.LineupMemberResponseDto;
 import com.shootdoori.match.exception.common.ErrorCode;
 import com.shootdoori.match.exception.common.NotFoundException;
-import com.shootdoori.match.team.domain.TeamMember;
 import com.shootdoori.match.team.service.TeamMemberQueryService;
-import com.shootdoori.match.user.domain.User;
 import com.shootdoori.match.user.service.UserQueryService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
